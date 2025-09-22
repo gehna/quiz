@@ -12,6 +12,11 @@
     "dev:all": "powershell -Command \"Start-Process node -ArgumentList 'server/index.cjs'; vite\""
   },
   "dependencies": {
+    "autotable": "^1.0.0",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
+    "nodemailer": "^7.0.6",
+    "pdfmake": "^0.2.20",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1"

@@ -4,7 +4,7 @@ import { useAuth } from '../../modules/auth/AuthContext'
 type Judge = {
   id: string
   fullName: string
-  telegram: string
+  email: string
 }
 
 function getStorageKey(user: string | null) {
@@ -15,29 +15,33 @@ export default function JudgesPage() {
   const { currentUser } = useAuth()
   const [judges, setJudges] = useState<Judge[]>([])
   const [invalidFullNameIds, setInvalidFullNameIds] = useState<Set<string>>(new Set())
-  const [invalidTelegramIds, setInvalidTelegramIds] = useState<Set<string>>(new Set())
+  const [invalidEmailIds, setInvalidEmailIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     async function load() {
       try {
         const user = currentUser || 'guest'
-        const res = await fetch(`/api/judges?user=${encodeURIComponent(user)}`)
+        const res = await fetch(`http://localhost:4000/api/judges?user=${encodeURIComponent(user)}`)
         if (!res.ok) throw new Error('Failed to load')
         const data = await res.json()
         if (Array.isArray(data?.judges)) {
-          setJudges(data.judges)
+          const migrated = data.judges.map((j: any) => ({ id: j.id, fullName: j.fullName, email: j.email ?? j.telegram ?? '' }))
+          setJudges(migrated)
         } else {
-          setJudges([{ id: crypto.randomUUID(), fullName: '', telegram: '' }])
+          setJudges([{ id: crypto.randomUUID(), fullName: '', email: '' }])
         }
       } catch {
         const raw = localStorage.getItem(getStorageKey(currentUser))
         if (raw) {
           try {
             const parsed = JSON.parse(raw)
-            if (Array.isArray(parsed)) setJudges(parsed)
+            if (Array.isArray(parsed)) {
+              const migrated = parsed.map((j: any) => ({ id: j.id, fullName: j.fullName, email: j.email ?? j.telegram ?? '' }))
+              setJudges(migrated)
+            }
           } catch {}
         } else {
-          setJudges([{ id: crypto.randomUUID(), fullName: '', telegram: '' }])
+          setJudges([{ id: crypto.randomUUID(), fullName: '', email: '' }])
         }
       }
     }
@@ -49,7 +53,7 @@ export default function JudgesPage() {
   }, [judges, currentUser])
 
   const handleAdd = () => {
-    setJudges((prev) => [...prev, { id: crypto.randomUUID(), fullName: '', telegram: '' }])
+    setJudges((prev) => [...prev, { id: crypto.randomUUID(), fullName: '', email: '' }])
   }
 
   const handleRemove = (id: string) => {
@@ -65,8 +69,8 @@ export default function JudgesPage() {
         return next
       })
     }
-    if (field === 'telegram') {
-      setInvalidTelegramIds((prev) => {
+    if (field === 'email') {
+      setInvalidEmailIds((prev) => {
         const next = new Set(prev)
         if (value.trim()) next.delete(id)
         return next
@@ -77,18 +81,18 @@ export default function JudgesPage() {
   const canAddMore = useMemo(() => judges.length < 50, [judges.length])
 
   const handleSave = async () => {
-    const normalized = judges.map((j) => ({ ...j, fullName: j.fullName.trim(), telegram: j.telegram.trim() }))
+    const normalized = judges.map((j) => ({ ...j, fullName: j.fullName.trim(), email: j.email.trim() }))
     const missingFullName = normalized.filter((j) => !j.fullName).map((j) => j.id)
-    const missingTelegram = normalized.filter((j) => !j.telegram).map((j) => j.id)
+    const missingEmail = normalized.filter((j) => !j.email).map((j) => j.id)
     setInvalidFullNameIds(new Set(missingFullName))
-    setInvalidTelegramIds(new Set(missingTelegram))
-    if (missingFullName.length || missingTelegram.length) return
-    const filtered = normalized.filter((j) => j.fullName || j.telegram)
-    setJudges(filtered.length ? filtered : [{ id: crypto.randomUUID(), fullName: '', telegram: '' }])
+    setInvalidEmailIds(new Set(missingEmail))
+    if (missingFullName.length || missingEmail.length) return
+    const filtered = normalized.filter((j) => j.fullName || j.email)
+    setJudges(filtered.length ? filtered : [{ id: crypto.randomUUID(), fullName: '', email: '' }])
     localStorage.setItem(getStorageKey(currentUser), JSON.stringify(filtered))
     try {
       const user = currentUser || 'guest'
-      await fetch('/api/judges', {
+      await fetch('http://localhost:4000/api/judges', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, judges: filtered }),
@@ -114,7 +118,7 @@ export default function JudgesPage() {
               alignItems: 'start',
             }}
           >
-            <div style={{ position: 'relative', paddingBottom: 16, minWidth: 0 }}>
+            <div style={{ position: 'relative', paddingBottom: 8, minWidth: 0 }}>
               <input
                 value={judge.fullName}
                 onChange={(e) => handleChange(judge.id, 'fullName', e.target.value)}
@@ -129,25 +133,25 @@ export default function JudgesPage() {
                 aria-invalid={invalidFullNameIds.has(judge.id)}
               />
               {invalidFullNameIds.has(judge.id) && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, color: '#e53935', fontSize: 12 }}>Поле «ФИО» обязательно</div>
+                <div style={{ position: 'absolute', top: 'calc(100% - 1px)', left: 0, color: '#e53935', fontSize: 11, lineHeight: '11px', margin: 0, whiteSpace: 'nowrap' }}>Обязательно</div>
               )}
             </div>
-            <div style={{ position: 'relative', paddingBottom: 16, minWidth: 0 }}>
+            <div style={{ position: 'relative', paddingBottom: 8, minWidth: 0 }}>
               <input
-                value={judge.telegram}
-                onChange={(e) => handleChange(judge.id, 'telegram', e.target.value)}
-                placeholder="Телеграмм"
+                value={judge.email}
+                onChange={(e) => handleChange(judge.id, 'email', e.target.value)}
+                placeholder="email"
                 style={{
                   fontSize: 16,
                   padding: '10px 12px',
                   borderRadius: 8,
-                  border: invalidTelegramIds.has(judge.id) ? '1px solid #e53935' : '1px solid #e5e5ea',
+                  border: invalidEmailIds.has(judge.id) ? '1px solid #e53935' : '1px solid #e5e5ea',
                   minWidth: 0,
                 }}
-                aria-invalid={invalidTelegramIds.has(judge.id)}
+                aria-invalid={invalidEmailIds.has(judge.id)}
               />
-              {invalidTelegramIds.has(judge.id) && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, color: '#e53935', fontSize: 12 }}>Поле «Телеграмм» обязательно</div>
+              {invalidEmailIds.has(judge.id) && (
+                <div style={{ position: 'absolute', top: 'calc(100% - 1px)', left: 0, color: '#e53935', fontSize: 11, lineHeight: '11px', margin: 0, whiteSpace: 'nowrap' }}>Обязательно</div>
               )}
             </div>
             <button

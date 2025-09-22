@@ -1,0 +1,34 @@
+{
+  "leha": [
+    {
+      "id": "e90f676d-180a-45f6-b420-58b2b891c485",
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "stageId": "3445c436-3ac0-4af3-b772-8ee309837b9c"
+    },
+    {
+      "id": "e48b6e84-1de1-4d85-8988-475579a3d443",
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "stageId": "08070eae-1ab9-45f7-9f06-4817e9e408c1"
+    },
+    {
+      "id": "ae79a3ae-d21e-4c5f-b8fe-119e8bac4d01",
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "stageId": "32ebaa69-5baf-4180-a2ea-14142510e108"
+    },
+    {
+      "id": "bba4500a-814e-4f47-92cb-60ef2e68766c",
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "stageId": "a07e4a6a-836f-4b64-9c36-198ddef2d892"
+    },
+    {
+      "id": "68dd9f89-e2d4-4b47-858a-dd6968feeae4",
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "stageId": "27e06c00-82da-41c1-b334-bc7c7c4fe2b5"
+    },
+    {
+      "id": "841dfd85-c550-4b32-a03b-5a4ca7a0e8c8",
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "stageId": "75f8f1b9-1396-4471-933a-20874aac0326"
+    }
+  ]
+}

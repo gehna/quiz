@@ -2,18 +2,33 @@
   "leha": [
     {
       "id": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
-      "fullName": "aaaa",
-      "telegram": "aaaa"
+      "fullName": "Гена",
+      "email": "gehna@yandex.ru"
     },
     {
       "id": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
-      "fullName": "фваф",
-      "telegram": "фывавф"
+      "fullName": "Маша",
+      "email": "gehna@yandex.ru"
     },
     {
       "id": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
-      "fullName": "впвап",
-      "telegram": "впавап"
+      "fullName": "Ира",
+      "email": "gehna@yandex.ru"
+    },
+    {
+      "id": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "fullName": "Леша",
+      "email": "gehna@yandex.ru"
+    },
+    {
+      "id": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "fullName": "Глеб",
+      "email": "gehna@yandex.ru"
+    },
+    {
+      "id": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "fullName": "Гриша",
+      "email": "gehna@yandex.ru"
     }
   ]
 }

@@ -1,0 +1,1128 @@
+{
+  "leha": {
+    "qkz9cp2dde7f3rlt83zya": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "l6x407uvh7hc4o1vpq3low": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "vvqz4hf25chje19zhv0zv": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "avd1w8n40phiorj8zmhg68": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "oie0aljiduansbg091mnhj": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "isjitmykrdphh47x7tg": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    },
+    "0kya2fno1us8d7al1k1cj": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "h5jqcc8lddbfp2k0k6i00w": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "4"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "5"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "hthbjwsys8dpo0am8r0wf": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "9fwfbbimyq642w5kfomtok": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "r2a9gp5tim6jhz85vanag": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "f94bd6fpurbq1gh3sdh2p": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    },
+    "k4jc5akokwcc4wtbkgzwzg": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "2"
+        }
+      ],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "o2l80aan7z9z99rqi32my7": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "4"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": ""
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "4"
+        }
+      ],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "oy43z39a0opyx7lcivil": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "3"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "3"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "ydtc5anr11yf2fbohfh0f": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "6srat2w6wxd7kcjhkaxiw": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "eturu37vwer0hte47wg4vf7": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    },
+    "choe58s2ayoah4anqnbg6j": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "3"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "2"
+        }
+      ],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "wsgn40s6comgg787dwmuyr": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "0qfhyc0x41zq6rb33nlptdd": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "ivc4cfvwrzgwisx25udqsg": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "5pxa2a0gaewqzqtbbqhdo": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "yj8td34gnc6w22vzzv3t": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    },
+    "yqwg486rzvopymbnrs7ms9": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "2lwvjqm3u5fsvlxb1jek8e": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "8uuh8r294itdj363t0wvuc": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "ek8exjz36op19ocdlk4n33": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": false,
+      "answers": [],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "guo17b69m0cuymlt6ld9ib": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "pqwyx6lmjde8473rztmxm": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": false,
+      "answers": [],
+      "stage": null,
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    },
+    "d3gpx21mogfdikhwmyzl4": {
+      "judgeId": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "3445c436-3ac0-4af3-b772-8ee309837b9c",
+        "number": "1",
+        "name": "Рыбалка"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гена"
+    },
+    "ukwae70qccik50a4vf1b": {
+      "judgeId": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "08070eae-1ab9-45f7-9f06-4817e9e408c1",
+        "number": "2",
+        "name": "Охота"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Маша"
+    },
+    "935a5w4zjtaevyyp856ba8": {
+      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "32ebaa69-5baf-4180-a2ea-14142510e108",
+        "number": "3",
+        "name": "Ориентирование"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Ира"
+    },
+    "34v4mka546h4mutz1g3a3g": {
+      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "a07e4a6a-836f-4b64-9c36-198ddef2d892",
+        "number": "4",
+        "name": "Парашют"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Леша"
+    },
+    "g2t4wz0hebc49qaklkzrw7": {
+      "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "27e06c00-82da-41c1-b334-bc7c7c4fe2b5",
+        "number": "5",
+        "name": "Медицина"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Глеб"
+    },
+    "acbkgmqhyebb7ejaahbl2r": {
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "submitted": true,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": "1"
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": "2"
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": "3"
+        }
+      ],
+      "stage": {
+        "id": "75f8f1b9-1396-4471-933a-20874aac0326",
+        "number": "6",
+        "name": "Узлы"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        }
+      ],
+      "judgeName": "Гриша"
+    }
+  }
+}

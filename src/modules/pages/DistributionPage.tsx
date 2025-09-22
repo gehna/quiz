@@ -1,7 +1,187 @@
+import { useEffect, useMemo, useState } from 'react'
+import { useAuth } from '../../modules/auth/AuthContext'
+
+type Judge = { id: string; fullName: string; telegram: string }
+type Stage = { id: string; number: string; name: string }
+type Pair = { id: string; judgeId: string; stageId: string }
+
+function key(user: string | null) { return user ? `distribution:list:${user}` : 'distribution:list:guest' }
+
 export default function DistributionPage() {
+  const { currentUser } = useAuth()
+  const [judges, setJudges] = useState<Judge[]>([])
+  const [stages, setStages] = useState<Stage[]>([])
+  const [pairs, setPairs] = useState<Pair[]>([])
+
+  useEffect(() => {
+    async function loadAll() {
+      const user = currentUser || 'guest'
+      try {
+        const [j, s] = await Promise.all([
+          fetch(`http://localhost:4000/api/judges?user=${encodeURIComponent(user)}`).then(r => r.json()),
+          fetch(`http://localhost:4000/api/stages?user=${encodeURIComponent(user)}`).then(r => r.json()),
+        ])
+        setJudges(Array.isArray(j.judges) ? j.judges : [])
+        setStages(Array.isArray(s.stages) ? s.stages : [])
+      } catch {}
+
+      try {
+        const res = await fetch(`http://localhost:4000/api/distribution?user=${encodeURIComponent(user)}`)
+        if (res.ok) {
+          const data = await res.json()
+          if (Array.isArray(data?.distribution)) setPairs(data.distribution)
+        }
+      } catch {
+        const raw = localStorage.getItem(key(currentUser))
+        if (raw) {
+          try { const parsed = JSON.parse(raw); if (Array.isArray(parsed)) setPairs(parsed) } catch {}
+        }
+      }
+    }
+    loadAll()
+  }, [currentUser])
+
+  useEffect(() => {
+    localStorage.setItem(key(currentUser), JSON.stringify(pairs))
+  }, [pairs, currentUser])
+
+  const handleAdd = () => {
+    const firstJudge = judges[0]?.id || ''
+    const firstStage = stages[0]?.id || ''
+    setPairs((prev) => [...prev, { id: crypto.randomUUID(), judgeId: firstJudge, stageId: firstStage }])
+  }
+
+  const handleRemove = (id: string) => {
+    setPairs((prev) => prev.filter((p) => p.id !== id))
+  }
+
+  const handleChange = (id: string, field: keyof Pair, value: string) => {
+    setPairs((prev) => prev.map((p) => (p.id === id ? { ...p, [field]: value } : p)))
+  }
+
+  const canAddMore = useMemo(() => pairs.length < 200 && judges.length && stages.length, [pairs.length, judges.length, stages.length])
+
+  const handleSave = async () => {
+    const filtered = pairs.filter((p) => p.judgeId && p.stageId)
+    setPairs(filtered)
+    localStorage.setItem(key(currentUser), JSON.stringify(filtered))
+    try {
+      const user = currentUser || 'guest'
+      await fetch('http://localhost:4000/api/distribution', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, distribution: filtered }),
+      })
+      alert('Сохранено')
+    } catch {
+      alert('Сохранено локально (сервер недоступен)')
+    }
+  }
+
   return (
     <div style={{ padding: 16 }}>
-      <h2>Распределение</h2>
+      <h2 style={{ margin: '8px 0 16px' }}>Распределение</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {pairs.map((pair) => (
+          <div
+            key={pair.id}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr auto',
+              gap: 8,
+              alignItems: 'center',
+            }}
+          >
+            <select
+              value={pair.judgeId}
+              onChange={(e) => handleChange(pair.id, 'judgeId', e.target.value)}
+              style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+            >
+              {judges.map((j) => (
+                <option key={j.id} value={j.id}>{j.fullName || '(без ФИО)'}</option>
+              ))}
+            </select>
+            <select
+              value={pair.stageId}
+              onChange={(e) => handleChange(pair.id, 'stageId', e.target.value)}
+              style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+            >
+              {stages.map((s) => (
+                <option key={s.id} value={s.id}>{s.number ? `${s.number}. ` : ''}{s.name || '(без названия)'}</option>
+              ))}
+            </select>
+            <button
+              aria-label="Удалить"
+              onClick={() => handleRemove(pair.id)}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 8,
+                border: '1px solid #e53935',
+                background: '#ffe8e8',
+                color: '#e53935',
+                fontSize: 20,
+                lineHeight: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              ×
+            </button>
+          </div>
+        ))}
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
+          <button
+            onClick={handleAdd}
+            disabled={!canAddMore}
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 24,
+              border: '1px solid #0bb783',
+              background: '#0bd18a',
+              color: '#fff',
+              fontSize: 28,
+              lineHeight: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            aria-label="Добавить связь"
+            title="Добавить связь"
+          >
+            +
+          </button>
+        </div>
+
+        <div
+          style={{
+            position: 'sticky',
+            bottom: 12,
+            background: 'linear-gradient(transparent, #fff 24px)',
+            paddingTop: 24,
+          }}
+        >
+          <button
+            onClick={handleSave}
+            style={{
+              width: '100%',
+              padding: '14px 16px',
+              fontSize: 16,
+              borderRadius: 12,
+              border: '1px solid #0bb783',
+              background: '#0bd18a',
+              color: '#fff',
+              fontWeight: 700,
+            }}
+          >
+            Сохранить
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
