@@ -11,54 +11,24 @@
       "fullName": "Маша"
     },
     {
-      "id": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
-      "number": "3",
-      "fullName": "Ира"
-    },
-    {
-      "id": "0d4b373a-bd4e-459b-9924-255693de5262",
-      "number": "4",
-      "fullName": "Леша"
-    },
-    {
       "id": "6651f15a-5391-4b14-93f0-10490f1210d8",
-      "number": "5",
+      "number": "3",
       "fullName": "Глеб"
     },
     {
       "id": "aecec245-4a69-4173-8cda-a54c80c5f518",
-      "number": "6",
+      "number": "4",
       "fullName": "Гриша"
     },
     {
       "id": "8057465b-5b30-4229-8c88-d0a2fbbad1a7",
-      "number": "7",
+      "number": "5",
       "fullName": "Валя"
     },
     {
-      "id": "e1c69d81-4f1b-424c-a337-8d58d53a09ce",
-      "number": "8",
-      "fullName": "Галя"
-    },
-    {
-      "id": "af814811-c550-41ec-a24d-911e72655399",
-      "number": "9",
-      "fullName": "Витя"
-    },
-    {
       "id": "01edf151-e58e-43ea-9183-dc3c7084216d",
-      "number": "10",
+      "number": "6",
       "fullName": "Иван"
-    },
-    {
-      "id": "43e2946a-4e4a-4886-8806-5b97bc9913ef",
-      "number": "11",
-      "fullName": "Иванчин"
-    },
-    {
-      "id": "124ab329-9ef3-4c6c-b2a4-d69caa511793",
-      "number": "12",
-      "fullName": "Владимирыч"
     }
   ]
 }

@@ -11,54 +11,24 @@
       "stageId": "08070eae-1ab9-45f7-9f06-4817e9e408c1"
     },
     {
-      "id": "ae79a3ae-d21e-4c5f-b8fe-119e8bac4d01",
-      "judgeId": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
-      "stageId": "32ebaa69-5baf-4180-a2ea-14142510e108"
-    },
-    {
-      "id": "bba4500a-814e-4f47-92cb-60ef2e68766c",
-      "judgeId": "0d4b373a-bd4e-459b-9924-255693de5262",
-      "stageId": "a07e4a6a-836f-4b64-9c36-198ddef2d892"
-    },
-    {
-      "id": "68dd9f89-e2d4-4b47-858a-dd6968feeae4",
+      "id": "89c54e6c-bc24-4c0a-b713-d98c4652bccb",
       "judgeId": "6651f15a-5391-4b14-93f0-10490f1210d8",
-      "stageId": "27e06c00-82da-41c1-b334-bc7c7c4fe2b5"
-    },
-    {
-      "id": "841dfd85-c550-4b32-a03b-5a4ca7a0e8c8",
-      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
-      "stageId": "75f8f1b9-1396-4471-933a-20874aac0326"
-    },
-    {
-      "id": "34bca86d-28e5-47ff-9ed1-d1cef296c7c8",
-      "judgeId": "8057465b-5b30-4229-8c88-d0a2fbbad1a7",
-      "stageId": "e03d491c-90b5-421d-b453-13a314361a3a"
-    },
-    {
-      "id": "e5555f3f-103e-414d-9057-a55d1b75a603",
-      "judgeId": "e1c69d81-4f1b-424c-a337-8d58d53a09ce",
-      "stageId": "d15d766a-1d0e-4846-ae33-f5b6822f64c1"
-    },
-    {
-      "id": "89ba1204-be76-448f-a235-e6471d913b45",
-      "judgeId": "af814811-c550-41ec-a24d-911e72655399",
-      "stageId": "ed3aeffe-b551-4615-b1cd-c2dec82ce4ac"
-    },
-    {
-      "id": "180e6dbb-63d0-4ef9-8977-06a7125ecaf3",
-      "judgeId": "01edf151-e58e-43ea-9183-dc3c7084216d",
-      "stageId": "763518f4-2f00-4b56-8b60-29a5a724e5e5"
-    },
-    {
-      "id": "3ca8d187-4a6d-4f7f-8a2e-809000c06c08",
-      "judgeId": "43e2946a-4e4a-4886-8806-5b97bc9913ef",
-      "stageId": "02a26a2d-c17e-40c4-939d-b4f503d739f9"
-    },
-    {
-      "id": "05bc0d4d-92b8-4f0e-91d4-bbacba6224ae",
-      "judgeId": "124ab329-9ef3-4c6c-b2a4-d69caa511793",
       "stageId": "f0873a68-a317-45c6-8d32-fc43b8cd5482"
+    },
+    {
+      "id": "0e7bfde4-549b-49c4-91d5-23b5f5ed95c8",
+      "judgeId": "aecec245-4a69-4173-8cda-a54c80c5f518",
+      "stageId": "8b797a53-a5df-41f9-b96b-361f467bce98"
+    },
+    {
+      "id": "a24ff843-6c85-4483-8fbd-e8e265adef75",
+      "judgeId": "8057465b-5b30-4229-8c88-d0a2fbbad1a7",
+      "stageId": "21c2d10a-9877-4f2a-a913-92e3cfe65685"
+    },
+    {
+      "id": "dff93081-1009-425d-b98c-c8e0b35a2281",
+      "judgeId": "01edf151-e58e-43ea-9183-dc3c7084216d",
+      "stageId": "c7c0873b-4cb5-4e77-ac67-652c15af526d"
     }
   ]
 }

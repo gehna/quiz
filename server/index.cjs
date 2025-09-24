@@ -27,6 +27,7 @@ const DATA_FILE_DISTRIBUTION = path.join(DATA_DIR, 'distribution.json')
 const DATA_FILE_TEAMS = path.join(DATA_DIR, 'teams.json')
 const DATA_FILE_SUBMISSIONS = path.join(DATA_DIR, 'submissions.json')
 const DATA_FILE_REPORT_SETTINGS = path.join(DATA_DIR, 'report_settings.json')
+const DATA_FILE_MANUAL_PLACEMENT = path.join(DATA_DIR, 'manual_placement.json')
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
 if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({}), 'utf-8')
@@ -35,6 +36,7 @@ if (!fs.existsSync(DATA_FILE_DISTRIBUTION)) fs.writeFileSync(DATA_FILE_DISTRIBUT
 if (!fs.existsSync(DATA_FILE_TEAMS)) fs.writeFileSync(DATA_FILE_TEAMS, JSON.stringify({}), 'utf-8')
 if (!fs.existsSync(DATA_FILE_SUBMISSIONS)) fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify({}), 'utf-8')
 if (!fs.existsSync(DATA_FILE_REPORT_SETTINGS)) fs.writeFileSync(DATA_FILE_REPORT_SETTINGS, JSON.stringify({}), 'utf-8')
+if (!fs.existsSync(DATA_FILE_MANUAL_PLACEMENT)) fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify({}), 'utf-8')
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -341,19 +343,12 @@ ${link}
       }
       return { teamId: t.id, teamName: t.name || '', teamNumber: t.number || '', perStage, total }
     })
-    // Rank by total ascending (dense ranking): equal totals share a place, next place increments by 1
+    // Rank by total ascending (simple sequential ranking): places assigned in order from top to bottom
     const MAX = 1e9
     results.sort((a, b) => (a.total || MAX) - (b.total || MAX))
-    let lastTotal = null
-    let currentPlace = 0
-    for (const r of results) {
-      const t = (typeof r.total === 'number' && Number.isFinite(r.total)) ? r.total : MAX
-      if (lastTotal === null || t !== lastTotal) {
-        currentPlace += 1
-        lastTotal = t
-      }
-      r.place = currentPlace
-    }
+    results.forEach((r, index) => {
+      r.place = index + 1
+    })
 
     const stageColumns = userStages.map((s) => ({ id: s.id, name: (s.number ? s.number + '. ' : '') + (s.name || '') }))
     return send(res, 200, { stages: stageColumns, teams: userTeams.map(t => ({ id: t.id, name: t.name, number: t.number })), rows: results })
@@ -424,6 +419,60 @@ ${link}
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
       }
+    }
+  }
+
+  // Manual placement endpoints
+  if (url.pathname === '/api/manual-placement') {
+    if (req.method === 'GET') {
+      const user = url.searchParams.get('user')
+      if (!user) return send(res, 400, { error: 'Missing user' })
+      
+      try {
+        const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+        return send(res, 200, manualDb[user] || [])
+      } catch (e) {
+        return send(res, 200, [])
+      }
+    }
+    
+    if (req.method === 'POST') {
+      try {
+        const rawBody = await readBody(req)
+        const body = JSON.parse(rawBody)
+        const { user: bodyUser, placements } = body
+        if (!bodyUser) {
+          return send(res, 400, { error: 'Missing user' })
+        }
+        if (!Array.isArray(placements)) {
+          return send(res, 400, { error: 'Invalid placements data' })
+        }
+        
+        const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+        manualDb[bodyUser] = placements
+        fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+        return send(res, 200, { ok: true })
+      } catch (e) {
+        return send(res, 500, { error: 'Server error' })
+      }
+    }
+  }
+
+  // Reset manual placements endpoint
+  if (url.pathname === '/api/manual-placement/reset' && req.method === 'POST') {
+    try {
+      const body = JSON.parse(await readBody(req))
+      const { user: bodyUser } = body
+      if (!bodyUser) {
+        return send(res, 400, { error: 'Missing user' })
+      }
+      
+      const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+      delete manualDb[bodyUser]
+      fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+      return send(res, 200, { ok: true })
+    } catch (e) {
+      return send(res, 500, { error: 'Server error' })
     }
   }
 

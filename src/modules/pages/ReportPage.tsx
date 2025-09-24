@@ -23,6 +23,9 @@ export default function ReportPage() {
   const [chiefSignature, setChiefSignature] = useState<string>('')
   const [settingsLoaded, setSettingsLoaded] = useState<boolean>(false)
 
+  // Check if all judges have submitted their results
+  const allJudgesSubmitted = judges.length > 0 && judges.every(judge => statusById[judge.id])
+
   useEffect(() => {
     async function load() {
       try {
@@ -81,13 +84,21 @@ export default function ReportPage() {
     setSending(true)
     try {
       const user = currentUser || 'guest'
-      // Reset all submissions and statuses
-      const res = await fetch('http://localhost:4000/api/report/reset', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user }),
-      })
+      // Reset all submissions, statuses, and manual placements
+      const [res, manualRes] = await Promise.all([
+        fetch('http://localhost:4000/api/report/reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user }),
+        }),
+        fetch('http://localhost:4000/api/manual-placement/reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user }),
+        })
+      ])
       if (!res.ok) throw new Error('reset failed')
+      if (!manualRes.ok) throw new Error('manual reset failed')
       setLinks([])
       await refreshStatus()
     } catch {
@@ -142,14 +153,27 @@ export default function ReportPage() {
   const handleGeneratePdf = async () => {
     try {
       const user = currentUser || 'guest'
-      const res = await fetch(`http://localhost:4000/api/report/results?user=${encodeURIComponent(user)}`)
+      const [res, manualRes] = await Promise.all([
+        fetch(`http://localhost:4000/api/report/results?user=${encodeURIComponent(user)}`),
+        fetch(`http://localhost:4000/api/manual-placement?user=${encodeURIComponent(user)}`)
+      ])
       if (!res.ok) {
         alert('Нет данных для отчета')
         return
       }
       const data = await res.json()
+      const manualData = manualRes.ok ? await manualRes.json() : []
       const stageCols: Array<{ id: string; name: string }> = data.stages || []
-      const rows: Array<{ teamId: string; teamName: string; perStage: Record<string, number|null>; total: number; place: number }>= data.rows || []
+      let rows: Array<{ teamId: string; teamName: string; perStage: Record<string, number|null>; total: number; place: number }>= data.rows || []
+      
+      // If manual placements exist, use them instead of calculated places
+      if (Array.isArray(manualData) && manualData.length > 0) {
+        const manualMap = new Map(manualData.map((p: any) => [p.teamId, p.place]))
+        rows = rows.map(row => ({
+          ...row,
+          place: manualMap.get(row.teamId) ?? row.place
+        }))
+      }
 
       const title = reportTitle && reportTitle.trim() ? reportTitle.trim() : 'Итоговый отчет'
 
@@ -157,8 +181,8 @@ export default function ReportPage() {
       const renderRotated = (text: string, opts?: { wrap?: boolean }) => {
         const t = (text || '').trim()
         const fontSize = 12 // match defaultStyle fontSize
-        const padding = 6
-        const lineGap = 2
+        const padding = 3.3
+        const lineGap = 1.1
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')!
         ctx.font = `${fontSize}px Roboto, sans-serif`
@@ -271,11 +295,11 @@ export default function ReportPage() {
       }
 
       const header: any[] = [
-        'Номер',
-        'Название команды',
-        ...stageCols.map(c => ({ image: renderRotated(c.name || '', { wrap: true }), alignment: 'center', margin: [0, 1, 0, 1] })),
+        { text: '№', alignment: 'center', margin: [0, 10, 0, 10] },
+        { text: 'Название команды', alignment: 'center', margin: [0, 10, 0, 10] },
+        ...stageCols.map(c => ({ image: renderRotated(c.name || '', { wrap: true }), alignment: 'center', margin: [0, 0, 0, 0] })),
         { image: renderRotated('Сумма баллов', { wrap: false }), alignment: 'center', margin: [0, 1, 0, 1] },
-        'Место',
+        { text: 'Место', alignment: 'center', margin: [0, 10, 0, 10] },
       ]
       const medalColor = (place: number | undefined) => {
         if (place === 1) return '#FFD700' // gold
@@ -293,33 +317,53 @@ export default function ReportPage() {
           { text: String(r.place ?? ''), alignment: 'center', fillColor: color },
         ]
       })
+      const stageStartIdx = 2
+      const stageEndIdx = 2 + stageCols.length - 1
       const docDefinition: any = {
         pageSize: 'A4',
         pageOrientation: 'landscape',
-        pageMargins: [24, 24, 24, 24],
-        defaultStyle: { fontSize: 12 },
+        pageMargins: [30, 20, 20, 20],
+        defaultStyle: { fontSize: 11 },
         content: [
-          { text: title, style: 'header', margin: [0, 0, 0, 12] },
+          { text: title, style: 'header', margin: [0, 0, 0, 10] },
           {
             table: {
               headerRows: 1,
-              widths: [40, 140, ...stageCols.map(()=>'auto'), 44, 40],
+              widths: [26, 130, ...stageCols.map(()=>'auto'), 40, 36],
               body: [header, ...body],
+              dontBreakRows: true,
             },
             layout: {
               hLineWidth: () => 2,
               vLineWidth: () => 2,
               hLineColor: () => '#000',
               vLineColor: () => '#000',
-              paddingLeft: () => 2,
-              paddingRight: () => 2,
+              paddingLeft: (rowIndex: number, _node: any, columnIndex: number) => {
+                // reduce header padding for stage columns by ~40%
+                if (rowIndex === 0 && columnIndex >= stageStartIdx && columnIndex <= stageEndIdx) return 1.2
+                return 2
+              },
+              paddingRight: (rowIndex: number, _node: any, columnIndex: number) => {
+                if (rowIndex === 0 && columnIndex >= stageStartIdx && columnIndex <= stageEndIdx) return 1.2
+                return 2
+              },
+              paddingTop: (rowIndex: number, _node: any, columnIndex: number) => {
+                if (rowIndex === 0 && columnIndex >= stageStartIdx && columnIndex <= stageEndIdx) return 0
+                if (rowIndex === 0 && (columnIndex === 0 || columnIndex === 1 || columnIndex === header.length - 1)) return 4
+                return 2
+              },
+              paddingBottom: (rowIndex: number, _node: any, columnIndex: number) => {
+                if (rowIndex === 0 && columnIndex >= stageStartIdx && columnIndex <= stageEndIdx) return 0
+                if (rowIndex === 0 && (columnIndex === 0 || columnIndex === 1 || columnIndex === header.length - 1)) return 4
+                return 2
+              },
             },
           },
-          { text: `\nГлавный судья ___________________________________  ${chiefSignature || ''}`, margin: [0, 12, 0, 0] },
+          { text: `\nГлавный судья ___________________________________  ${chiefSignature || ''}`, margin: [0, 10, 0, 0] },
         ],
         styles: {
-          header: { fontSize: 16, bold: true },
-          tableHeader: { bold: true, alignment: 'center' },
+          header: { fontSize: 15, bold: true },
+          tableHeader: { bold: true, alignment: 'center', verticalAlignment: 'middle' },
         },
       }
       pdfMake.createPdf(docDefinition).download('report.pdf')
@@ -366,10 +410,55 @@ export default function ReportPage() {
 
       {/* auto-refresh уже есть; кнопка не нужна */}
 
+      {!allJudgesSubmitted && judges.length > 0 && (
+        <div style={{ 
+          backgroundColor: '#fff3cd', 
+          border: '1px solid #ffeaa7', 
+          borderRadius: '8px', 
+          padding: '12px', 
+          marginTop: '20px',
+          fontSize: '14px',
+          color: '#856404',
+          textAlign: 'center'
+        }}>
+          Кнопки "Отчет" и "Вручную" станут доступными, когда все судьи введут свои результаты (все квадратики станут зелеными)
+        </div>
+      )}
 
-      <div style={{ marginTop: 24 }}>
-        <button onClick={handleGeneratePdf} style={{ width: '100%', padding: '14px 16px', fontSize: 16, borderRadius: 12, border: '1px solid #0bb783', background: '#0bd18a', color: '#fff', fontWeight: 700 }}>
+      <div style={{ marginTop: 24, display: 'flex', gap: '10px' }}>
+        <button 
+          onClick={handleGeneratePdf} 
+          disabled={!allJudgesSubmitted}
+          style={{ 
+            flex: 1, 
+            padding: '14px 16px', 
+            fontSize: 16, 
+            borderRadius: 12, 
+            border: allJudgesSubmitted ? '1px solid #0bb783' : '1px solid #ccc', 
+            background: allJudgesSubmitted ? '#0bd18a' : '#f5f5f5', 
+            color: allJudgesSubmitted ? '#fff' : '#999', 
+            fontWeight: 700,
+            cursor: allJudgesSubmitted ? 'pointer' : 'not-allowed'
+          }}
+        >
           Отчет
+        </button>
+        <button 
+          onClick={() => navigate('/manual-placement')} 
+          disabled={!allJudgesSubmitted}
+          style={{ 
+            flex: 1, 
+            padding: '14px 16px', 
+            fontSize: 16, 
+            borderRadius: 12, 
+            border: allJudgesSubmitted ? '1px solid #007bff' : '1px solid #ccc', 
+            background: allJudgesSubmitted ? '#007bff' : '#f5f5f5', 
+            color: allJudgesSubmitted ? '#fff' : '#999', 
+            fontWeight: 700,
+            cursor: allJudgesSubmitted ? 'pointer' : 'not-allowed'
+          }}
+        >
+          Вручную
         </button>
       </div>
     </div>
