@@ -3,8 +3,8 @@ import { useAuth } from '../../modules/auth/AuthContext'
 
 type Judge = {
   id: string
+  number: string
   fullName: string
-  email: string
 }
 
 function getStorageKey(user: string | null) {
@@ -15,7 +15,7 @@ export default function JudgesPage() {
   const { currentUser } = useAuth()
   const [judges, setJudges] = useState<Judge[]>([])
   const [invalidFullNameIds, setInvalidFullNameIds] = useState<Set<string>>(new Set())
-  const [invalidEmailIds, setInvalidEmailIds] = useState<Set<string>>(new Set())
+  const [invalidNumberIds, setInvalidNumberIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     async function load() {
@@ -25,10 +25,10 @@ export default function JudgesPage() {
         if (!res.ok) throw new Error('Failed to load')
         const data = await res.json()
         if (Array.isArray(data?.judges)) {
-          const migrated = data.judges.map((j: any) => ({ id: j.id, fullName: j.fullName, email: j.email ?? j.telegram ?? '' }))
+          const migrated = data.judges.map((j: any, idx: number) => ({ id: j.id, number: String(idx + 1), fullName: j.fullName }))
           setJudges(migrated)
         } else {
-          setJudges([{ id: crypto.randomUUID(), fullName: '', email: '' }])
+          setJudges([{ id: crypto.randomUUID(), number: '1', fullName: '' }])
         }
       } catch {
         const raw = localStorage.getItem(getStorageKey(currentUser))
@@ -36,12 +36,12 @@ export default function JudgesPage() {
           try {
             const parsed = JSON.parse(raw)
             if (Array.isArray(parsed)) {
-              const migrated = parsed.map((j: any) => ({ id: j.id, fullName: j.fullName, email: j.email ?? j.telegram ?? '' }))
+              const migrated = parsed.map((j: any, idx: number) => ({ id: j.id, number: String(j.number ?? idx + 1), fullName: j.fullName }))
               setJudges(migrated)
             }
           } catch {}
         } else {
-          setJudges([{ id: crypto.randomUUID(), fullName: '', email: '' }])
+          setJudges([{ id: crypto.randomUUID(), number: '1', fullName: '' }])
         }
       }
     }
@@ -52,16 +52,22 @@ export default function JudgesPage() {
     localStorage.setItem(getStorageKey(currentUser), JSON.stringify(judges))
   }, [judges, currentUser])
 
+  const renumber = (list: Judge[]) => list.map((j, idx) => ({ ...j, number: String(idx + 1) }))
+
   const handleAdd = () => {
-    setJudges((prev) => [...prev, { id: crypto.randomUUID(), fullName: '', email: '' }])
+    setJudges((prev) => renumber([...prev, { id: crypto.randomUUID(), number: '', fullName: '' }]))
   }
 
   const handleRemove = (id: string) => {
-    setJudges((prev) => prev.filter((j) => j.id !== id))
+    setJudges((prev) => renumber(prev.filter((j) => j.id !== id)))
   }
 
   const handleChange = (id: string, field: keyof Judge, value: string) => {
-    setJudges((prev) => prev.map((j) => (j.id === id ? { ...j, [field]: value } : j)))
+    setJudges((prev) => {
+      const next = prev.map((j) => (j.id === id ? { ...j, [field]: value } : j))
+      if (field === 'number') return renumber(next)
+      return next
+    })
     if (field === 'fullName') {
       setInvalidFullNameIds((prev) => {
         const next = new Set(prev)
@@ -69,26 +75,22 @@ export default function JudgesPage() {
         return next
       })
     }
-    if (field === 'email') {
-      setInvalidEmailIds((prev) => {
-        const next = new Set(prev)
-        if (value.trim()) next.delete(id)
-        return next
-      })
+    if (field === 'number') {
+      setInvalidNumberIds((prev) => { const next = new Set(prev); if (value.trim()) next.delete(id); return next })
     }
   }
 
   const canAddMore = useMemo(() => judges.length < 50, [judges.length])
 
   const handleSave = async () => {
-    const normalized = judges.map((j) => ({ ...j, fullName: j.fullName.trim(), email: j.email.trim() }))
+    const normalized = judges.map((j) => ({ ...j, number: j.number.trim(), fullName: j.fullName.trim() }))
     const missingFullName = normalized.filter((j) => !j.fullName).map((j) => j.id)
-    const missingEmail = normalized.filter((j) => !j.email).map((j) => j.id)
+    const missingNumber = normalized.filter((j) => !j.number).map((j) => j.id)
     setInvalidFullNameIds(new Set(missingFullName))
-    setInvalidEmailIds(new Set(missingEmail))
-    if (missingFullName.length || missingEmail.length) return
-    const filtered = normalized.filter((j) => j.fullName || j.email)
-    setJudges(filtered.length ? filtered : [{ id: crypto.randomUUID(), fullName: '', email: '' }])
+    setInvalidNumberIds(new Set(missingNumber))
+    if (missingFullName.length || missingNumber.length) return
+    const filtered = normalized.filter((j) => j.fullName || j.number)
+    setJudges(filtered.length ? filtered : [{ id: crypto.randomUUID(), number: '1', fullName: '' }])
     localStorage.setItem(getStorageKey(currentUser), JSON.stringify(filtered))
     try {
       const user = currentUser || 'guest'
@@ -113,11 +115,29 @@ export default function JudgesPage() {
             key={judge.id}
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr auto',
+              gridTemplateColumns: '1fr 2fr auto',
               gap: 8,
               alignItems: 'start',
             }}
           >
+            <div style={{ position: 'relative', paddingBottom: 8, minWidth: 0 }}>
+              <input
+                value={judge.number}
+                onChange={(e) => handleChange(judge.id, 'number', e.target.value)}
+                placeholder="Номер"
+                style={{
+                  fontSize: 16,
+                  padding: '10px 12px',
+                  borderRadius: 8,
+                  border: invalidNumberIds.has(judge.id) ? '1px solid #e53935' : '1px solid #e5e5ea',
+                  minWidth: 0,
+                }}
+                aria-invalid={invalidNumberIds.has(judge.id)}
+              />
+              {invalidNumberIds.has(judge.id) && (
+                <div style={{ position: 'absolute', top: 'calc(100% - 1px)', left: 0, color: '#e53935', fontSize: 11, lineHeight: '11px', margin: 0, whiteSpace: 'nowrap' }}>Обязательно</div>
+              )}
+            </div>
             <div style={{ position: 'relative', paddingBottom: 8, minWidth: 0 }}>
               <input
                 value={judge.fullName}
@@ -133,24 +153,6 @@ export default function JudgesPage() {
                 aria-invalid={invalidFullNameIds.has(judge.id)}
               />
               {invalidFullNameIds.has(judge.id) && (
-                <div style={{ position: 'absolute', top: 'calc(100% - 1px)', left: 0, color: '#e53935', fontSize: 11, lineHeight: '11px', margin: 0, whiteSpace: 'nowrap' }}>Обязательно</div>
-              )}
-            </div>
-            <div style={{ position: 'relative', paddingBottom: 8, minWidth: 0 }}>
-              <input
-                value={judge.email}
-                onChange={(e) => handleChange(judge.id, 'email', e.target.value)}
-                placeholder="email"
-                style={{
-                  fontSize: 16,
-                  padding: '10px 12px',
-                  borderRadius: 8,
-                  border: invalidEmailIds.has(judge.id) ? '1px solid #e53935' : '1px solid #e5e5ea',
-                  minWidth: 0,
-                }}
-                aria-invalid={invalidEmailIds.has(judge.id)}
-              />
-              {invalidEmailIds.has(judge.id) && (
                 <div style={{ position: 'absolute', top: 'calc(100% - 1px)', left: 0, color: '#e53935', fontSize: 11, lineHeight: '11px', margin: 0, whiteSpace: 'nowrap' }}>Обязательно</div>
               )}
             </div>

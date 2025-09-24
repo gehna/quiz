@@ -97,6 +97,12 @@ const server = http.createServer(async (req, res) => {
         const db = JSON.parse(fs.readFileSync(DATA_FILE_STAGES, 'utf-8'))
         db[user] = stages
         fs.writeFileSync(DATA_FILE_STAGES, JSON.stringify(db, null, 2), 'utf-8')
+        // Reset submissions for this user when stages change to avoid mismatches
+        try {
+          const subsDb = JSON.parse(fs.readFileSync(DATA_FILE_SUBMISSIONS, 'utf-8'))
+          subsDb[user] = {}
+          fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
+        } catch {}
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
@@ -350,10 +356,31 @@ ${link}
     if (!token) return send(res, 400, { error: 'Missing token' })
     if (req.method === 'GET') {
       const subsDb = JSON.parse(fs.readFileSync(DATA_FILE_SUBMISSIONS, 'utf-8'))
+      const stagesDb = JSON.parse(fs.readFileSync(DATA_FILE_STAGES, 'utf-8'))
+      const distrDb = JSON.parse(fs.readFileSync(DATA_FILE_DISTRIBUTION, 'utf-8'))
+      const judgesDb = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'))
+      const teamsDb = JSON.parse(fs.readFileSync(DATA_FILE_TEAMS, 'utf-8'))
       // find token across users
       for (const user of Object.keys(subsDb)) {
         const rec = subsDb[user][token]
-        if (rec) return send(res, 200, { ok: true, judgeId: rec.judgeId, judgeName: rec.judgeName, stage: rec.stage, teams: rec.teams, answers: rec.answers, submitted: rec.submitted })
+        if (rec) {
+          const currentStages = stagesDb[user] || []
+          const currentTeams = teamsDb[user] || []
+          const distr = distrDb[user] || []
+          const judge = (judgesDb[user] || []).find(j => j.id === rec.judgeId)
+          // Resolve current stage assignment
+          const pair = distr.find(p => p.judgeId === rec.judgeId)
+          const stage = pair ? (currentStages.find(s => s.id === pair.stageId) || null) : null
+          return send(res, 200, {
+            ok: true,
+            judgeId: rec.judgeId,
+            judgeName: judge ? (judge.fullName || rec.judgeName) : rec.judgeName,
+            stage,
+            teams: currentTeams,
+            answers: rec.answers,
+            submitted: rec.submitted,
+          })
+        }
       }
       return send(res, 404, { error: 'Invalid token' })
     }

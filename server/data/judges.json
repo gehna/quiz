@@ -2,63 +2,63 @@
   "leha": [
     {
       "id": "c55f11ba-be3a-4557-bdf0-6fbba14d6ddb",
-      "fullName": "1-Гена",
-      "email": "gehna@yandex.ru"
+      "number": "1",
+      "fullName": "Гена"
     },
     {
       "id": "5dd2f335-e401-442b-b20f-478bb44b8f6a",
-      "fullName": "2-Маша",
-      "email": "gehna@yandex.ru"
+      "number": "2",
+      "fullName": "Маша"
     },
     {
       "id": "8ad7821b-8e07-40fe-8b9c-764b01bccbaf",
-      "fullName": "3-Ира",
-      "email": "gehna@yandex.ru"
+      "number": "3",
+      "fullName": "Ира"
     },
     {
       "id": "0d4b373a-bd4e-459b-9924-255693de5262",
-      "fullName": "4-Леша",
-      "email": "gehna@yandex.ru"
+      "number": "4",
+      "fullName": "Леша"
     },
     {
       "id": "6651f15a-5391-4b14-93f0-10490f1210d8",
-      "fullName": "5-Глеб",
-      "email": "gehna@yandex.ru"
+      "number": "5",
+      "fullName": "Глеб"
     },
     {
       "id": "aecec245-4a69-4173-8cda-a54c80c5f518",
-      "fullName": "6-Гриша",
-      "email": "gehna@yandex.ru"
+      "number": "6",
+      "fullName": "Гриша"
     },
     {
       "id": "8057465b-5b30-4229-8c88-d0a2fbbad1a7",
-      "fullName": "7-Валя",
-      "email": "gehna@yandex.ru"
+      "number": "7",
+      "fullName": "Валя"
     },
     {
       "id": "e1c69d81-4f1b-424c-a337-8d58d53a09ce",
-      "fullName": "8-Галя",
-      "email": "gehna@yandex.ru"
+      "number": "8",
+      "fullName": "Галя"
     },
     {
       "id": "af814811-c550-41ec-a24d-911e72655399",
-      "fullName": "9-Витя",
-      "email": "gehna@yandex.ru"
+      "number": "9",
+      "fullName": "Витя"
     },
     {
       "id": "01edf151-e58e-43ea-9183-dc3c7084216d",
-      "fullName": "10-Иван",
-      "email": "gehna@yandex.ru"
+      "number": "10",
+      "fullName": "Иван"
     },
     {
       "id": "43e2946a-4e4a-4886-8806-5b97bc9913ef",
-      "fullName": "11-Иванчин",
-      "email": "gehna@yandex.ru"
+      "number": "11",
+      "fullName": "Иванчин"
     },
     {
       "id": "124ab329-9ef3-4c6c-b2a4-d69caa511793",
-      "fullName": "12-Владимирыч",
-      "email": "gehna@yandex.ru"
+      "number": "12",
+      "fullName": "Владимирыч"
     }
   ]
 }

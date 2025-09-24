@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../modules/auth/AuthContext'
 
-type Judge = { id: string; fullName: string; telegram: string }
+type Judge = { id: string; number?: string; fullName: string }
 type Stage = { id: string; number: string; name: string }
 type Pair = { id: string; judgeId: string; stageId: string }
 
@@ -88,24 +88,24 @@ export default function DistributionPage() {
             key={pair.id}
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr auto',
-              gap: 8,
+              gridTemplateColumns: '1fr 1fr 44px',
+              gap: 6,
               alignItems: 'center',
             }}
           >
             <select
               value={pair.judgeId}
               onChange={(e) => handleChange(pair.id, 'judgeId', e.target.value)}
-              style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+              style={{ fontSize: 15, padding: '8px 10px', borderRadius: 8, border: '1px solid #e5e5ea', minWidth: 0, boxSizing: 'border-box' }}
             >
-              {judges.map((j) => (
-                <option key={j.id} value={j.id}>{j.fullName || '(без ФИО)'}</option>
+              {judges.map((j, idx) => (
+                <option key={j.id} value={j.id}>{(j.number ? j.number : String(idx + 1))}-{j.fullName || '(без ФИО)'}</option>
               ))}
             </select>
             <select
               value={pair.stageId}
               onChange={(e) => handleChange(pair.id, 'stageId', e.target.value)}
-              style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+              style={{ fontSize: 15, padding: '8px 10px', borderRadius: 8, border: '1px solid #e5e5ea', minWidth: 0, boxSizing: 'border-box' }}
             >
               {stages.map((s) => (
                 <option key={s.id} value={s.id}>{s.number ? `${s.number}. ` : ''}{s.name || '(без названия)'}</option>
@@ -115,14 +115,14 @@ export default function DistributionPage() {
               aria-label="Удалить"
               onClick={() => handleRemove(pair.id)}
               style={{
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
                 borderRadius: 8,
                 border: '1px solid #e53935',
                 background: '#ffe8e8',
                 color: '#e53935',
-                fontSize: 20,
-                lineHeight: '20px',
+                fontSize: 18,
+                lineHeight: '18px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
