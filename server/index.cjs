@@ -76,6 +76,12 @@ const server = http.createServer(async (req, res) => {
         const db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'))
         db[user] = judges
         fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2), 'utf-8')
+        
+        // Reset manual placements when judges are updated
+        const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+        delete manualDb[user]
+        fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+        
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
@@ -105,6 +111,14 @@ const server = http.createServer(async (req, res) => {
           subsDb[user] = {}
           fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
         } catch {}
+        
+        // Reset manual placements when stages are updated
+        try {
+          const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+          delete manualDb[user]
+          fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+        } catch {}
+        
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
@@ -128,6 +142,12 @@ const server = http.createServer(async (req, res) => {
         const db = JSON.parse(fs.readFileSync(DATA_FILE_DISTRIBUTION, 'utf-8'))
         db[user] = distribution
         fs.writeFileSync(DATA_FILE_DISTRIBUTION, JSON.stringify(db, null, 2), 'utf-8')
+        
+        // Reset manual placements when distribution is updated
+        const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+        delete manualDb[user]
+        fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+        
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
@@ -151,6 +171,12 @@ const server = http.createServer(async (req, res) => {
         const db = JSON.parse(fs.readFileSync(DATA_FILE_TEAMS, 'utf-8'))
         db[user] = teams
         fs.writeFileSync(DATA_FILE_TEAMS, JSON.stringify(db, null, 2), 'utf-8')
+        
+        // Reset manual placements when teams are updated
+        const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+        delete manualDb[user]
+        fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+        
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })
@@ -412,6 +438,14 @@ ${link}
               }
             }
             fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
+            
+            // Reset manual placements when judge submissions are updated
+            try {
+              const manualDb = JSON.parse(fs.readFileSync(DATA_FILE_MANUAL_PLACEMENT, 'utf-8'))
+              delete manualDb[user]
+              fs.writeFileSync(DATA_FILE_MANUAL_PLACEMENT, JSON.stringify(manualDb, null, 2), 'utf-8')
+            } catch {}
+            
             return send(res, 200, { ok: true })
           }
         }

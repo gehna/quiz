@@ -41,6 +41,15 @@ const ManualPlacementPage: React.FC = () => {
     return () => window.removeEventListener('focus', handleFocus)
   }, [])
 
+  // Periodically refresh data to detect changes from other pages
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadData()
+    }, 2000) // Check every 2 seconds
+    
+    return () => clearInterval(interval)
+  }, [])
+
   const loadData = async () => {
     try {
       const user = localStorage.getItem('auth:user')
