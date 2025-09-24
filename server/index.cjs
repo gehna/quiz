@@ -26,6 +26,7 @@ const DATA_FILE_STAGES = path.join(DATA_DIR, 'stages.json')
 const DATA_FILE_DISTRIBUTION = path.join(DATA_DIR, 'distribution.json')
 const DATA_FILE_TEAMS = path.join(DATA_DIR, 'teams.json')
 const DATA_FILE_SUBMISSIONS = path.join(DATA_DIR, 'submissions.json')
+const DATA_FILE_REPORT_SETTINGS = path.join(DATA_DIR, 'report_settings.json')
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
 if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({}), 'utf-8')
@@ -33,6 +34,7 @@ if (!fs.existsSync(DATA_FILE_STAGES)) fs.writeFileSync(DATA_FILE_STAGES, JSON.st
 if (!fs.existsSync(DATA_FILE_DISTRIBUTION)) fs.writeFileSync(DATA_FILE_DISTRIBUTION, JSON.stringify({}), 'utf-8')
 if (!fs.existsSync(DATA_FILE_TEAMS)) fs.writeFileSync(DATA_FILE_TEAMS, JSON.stringify({}), 'utf-8')
 if (!fs.existsSync(DATA_FILE_SUBMISSIONS)) fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify({}), 'utf-8')
+if (!fs.existsSync(DATA_FILE_REPORT_SETTINGS)) fs.writeFileSync(DATA_FILE_REPORT_SETTINGS, JSON.stringify({}), 'utf-8')
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -141,6 +143,31 @@ const server = http.createServer(async (req, res) => {
         const db = JSON.parse(fs.readFileSync(DATA_FILE_TEAMS, 'utf-8'))
         db[user] = teams
         fs.writeFileSync(DATA_FILE_TEAMS, JSON.stringify(db, null, 2), 'utf-8')
+        return send(res, 200, { ok: true })
+      } catch (e) {
+        return send(res, 500, { error: 'Server error' })
+      }
+    }
+  }
+
+  // Report settings (title/signature) per user
+  if (url.pathname === '/api/report/settings') {
+    if (req.method === 'GET') {
+      const user = url.searchParams.get('user')
+      if (!user) return send(res, 400, { error: 'Missing user' })
+      const db = JSON.parse(fs.readFileSync(DATA_FILE_REPORT_SETTINGS, 'utf-8'))
+      const rec = db[user] || { title: '', signature: '' }
+      return send(res, 200, rec)
+    }
+    if (req.method === 'POST') {
+      try {
+        const raw = await readBody(req)
+        const payload = JSON.parse(raw || '{}')
+        const { user, title, signature } = payload
+        if (!user) return send(res, 400, { error: 'Missing user' })
+        const db = JSON.parse(fs.readFileSync(DATA_FILE_REPORT_SETTINGS, 'utf-8'))
+        db[user] = { title: String(title || ''), signature: String(signature || '') }
+        fs.writeFileSync(DATA_FILE_REPORT_SETTINGS, JSON.stringify(db, null, 2), 'utf-8')
         return send(res, 200, { ok: true })
       } catch (e) {
         return send(res, 500, { error: 'Server error' })

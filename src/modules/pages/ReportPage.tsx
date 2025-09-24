@@ -21,6 +21,7 @@ export default function ReportPage() {
   const [sending, setSending] = useState(false)
   const [reportTitle, setReportTitle] = useState<string>('Итоговый отчет')
   const [chiefSignature, setChiefSignature] = useState<string>('')
+  const [settingsLoaded, setSettingsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     async function load() {
@@ -33,9 +34,34 @@ export default function ReportPage() {
         }
       } catch {}
       await refreshStatus()
+      // Load report settings (title/signature)
+      try {
+        const user = currentUser || 'guest'
+        const rs = await fetch(`http://localhost:4000/api/report/settings?user=${encodeURIComponent(user)}`)
+        if (rs.ok) {
+          const data = await rs.json()
+          if (typeof data?.title === 'string') setReportTitle(data.title)
+          if (typeof data?.signature === 'string') setChiefSignature(data.signature)
+        }
+      } catch {}
+      setSettingsLoaded(true)
     }
     load()
   }, [currentUser])
+
+  // Autosave report settings (debounced)
+  useEffect(() => {
+    if (!settingsLoaded) return
+    const user = currentUser || 'guest'
+    const handle = setTimeout(() => {
+      fetch('http://localhost:4000/api/report/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, title: reportTitle, signature: chiefSignature }),
+      }).catch(() => {})
+    }, 500)
+    return () => clearTimeout(handle)
+  }, [reportTitle, chiefSignature, currentUser, settingsLoaded])
 
   const refreshStatus = async () => {
     try {
@@ -114,8 +140,8 @@ export default function ReportPage() {
 
       const title = reportTitle && reportTitle.trim() ? reportTitle.trim() : 'Итоговый отчет'
 
-      // Helper: render rotated header text (90°) into dataURL image with two-line wrap
-      const renderRotated = (text: string) => {
+      // Helper: render rotated header text (90°) into dataURL image with optional two-line wrap
+      const renderRotated = (text: string, opts?: { wrap?: boolean }) => {
         const t = (text || '').trim()
         const fontSize = 12 // match defaultStyle fontSize
         const padding = 6
@@ -124,10 +150,14 @@ export default function ReportPage() {
         const ctx = canvas.getContext('2d')!
         ctx.font = `${fontSize}px Roboto, sans-serif`
 
+        const enableWrap = opts?.wrap !== false
         // Wrap into up to two lines by words
         const words = t.split(/\s+/).filter(Boolean)
         let line1 = ''
         let line2 = ''
+        if (!enableWrap) {
+          line1 = t
+        } else {
         // If starts with "N. ..." where N in 1..100, keep "N." glued to the next word
         const matchNumDot = /^\s*(\d{1,3})\.\s*(.+)$/.exec(t)
         if (matchNumDot) {
@@ -199,6 +229,7 @@ export default function ReportPage() {
             if (!line2) line2 = ''
           }
         }
+        }
 
         const lines = line2 ? [line1, line2] : [line1]
         const lineHeigthPx = fontSize + lineGap
@@ -229,8 +260,8 @@ export default function ReportPage() {
       const header: any[] = [
         'Номер',
         'Название команды',
-        ...stageCols.map(c => ({ image: renderRotated(c.name || ''), alignment: 'center', margin: [0, 2, 0, 2] })),
-        'Сумма баллов',
+        ...stageCols.map(c => ({ image: renderRotated(c.name || '', { wrap: true }), alignment: 'center', margin: [0, 1, 0, 1] })),
+        { image: renderRotated('Сумма баллов', { wrap: false }), alignment: 'center', margin: [0, 1, 0, 1] },
         'Место',
       ]
       const body = rows.map(r => [
@@ -250,7 +281,7 @@ export default function ReportPage() {
           {
             table: {
               headerRows: 1,
-              widths: [40, '*', ...stageCols.map(()=>'auto'), 60, 40],
+              widths: [40, 140, ...stageCols.map(()=>'auto'), 44, 40],
               body: [header, ...body],
             },
             layout: {
@@ -258,6 +289,8 @@ export default function ReportPage() {
               vLineWidth: () => 2,
               hLineColor: () => '#000',
               vLineColor: () => '#000',
+              paddingLeft: () => 2,
+              paddingRight: () => 2,
             },
           },
           { text: `\nГлавный судья ___________________________________  ${chiefSignature || ''}`, margin: [0, 12, 0, 0] },
