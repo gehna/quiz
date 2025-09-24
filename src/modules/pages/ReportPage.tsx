@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 // Using pdfmake for proper Cyrillic support
 // @ts-ignore
 import pdfMake from 'pdfmake/build/pdfmake'
@@ -13,10 +14,13 @@ type Judge = { id: string; fullName: string; email?: string }
 
 export default function ReportPage() {
   const { currentUser } = useAuth()
+  const navigate = useNavigate()
   const [judges, setJudges] = useState<Judge[]>([])
   const [statusById, setStatusById] = useState<Record<string, boolean>>({})
   const [links, setLinks] = useState<Array<{ judgeId: string; token: string; url: string }>>([])
   const [sending, setSending] = useState(false)
+  const [reportTitle, setReportTitle] = useState<string>('Итоговый отчет')
+  const [chiefSignature, setChiefSignature] = useState<string>('')
 
   useEffect(() => {
     async function load() {
@@ -51,19 +55,15 @@ export default function ReportPage() {
     setSending(true)
     try {
       const user = currentUser || 'guest'
-      const res = await fetch('http://localhost:4000/api/report/send', {
+      // Reset all submissions and statuses
+      const res = await fetch('http://localhost:4000/api/report/reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user }),
       })
-      if (res.ok) {
-        const data = await res.json()
-        setLinks(data.links || [])
-        alert('Ссылки сгенерированы (имитация отправки по email)')
-        await refreshStatus()
-      } else {
-        alert('Не удалось отправить')
-      }
+      if (!res.ok) throw new Error('reset failed')
+      setLinks([])
+      await refreshStatus()
     } catch {
       alert('Сервер недоступен')
     } finally {
@@ -75,6 +75,29 @@ export default function ReportPage() {
     const parts = fullName.trim().split(/\s+/)
     const s = parts.slice(0, 2).map(p => p[0] || '').join('').toUpperCase()
     return s || '??'
+  }
+
+  const openJudgeForm = async (judgeId: string) => {
+    try {
+      const user = currentUser || 'guest'
+      const res = await fetch('http://localhost:4000/api/report/send-one', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, judgeId }),
+      })
+      if (!res.ok) {
+        alert('Не удалось открыть форму')
+        return
+      }
+      const data = await res.json()
+      if (data?.token) {
+        navigate(`/s/${data.token}`)
+      } else if (data?.url) {
+        navigate(data.url.replace(/^https?:\/\/[^/]+/, ''))
+      } else {
+        alert('Ответ сервера без ссылки')
+      }
+    } catch {}
   }
 
   const handleGeneratePdf = async () => {
@@ -89,11 +112,124 @@ export default function ReportPage() {
       const stageCols: Array<{ id: string; name: string }> = data.stages || []
       const rows: Array<{ teamId: string; teamName: string; perStage: Record<string, number|null>; total: number; place: number }>= data.rows || []
 
-      const title = 'Итоговый отчет'
-      const header = [
+      const title = reportTitle && reportTitle.trim() ? reportTitle.trim() : 'Итоговый отчет'
+
+      // Helper: render rotated header text (90°) into dataURL image with two-line wrap
+      const renderRotated = (text: string) => {
+        const t = (text || '').trim()
+        const fontSize = 12 // match defaultStyle fontSize
+        const padding = 6
+        const lineGap = 2
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')!
+        ctx.font = `${fontSize}px Roboto, sans-serif`
+
+        // Wrap into up to two lines by words
+        const words = t.split(/\s+/).filter(Boolean)
+        let line1 = ''
+        let line2 = ''
+        // If starts with "N. ..." where N in 1..100, keep "N." glued to the next word
+        const matchNumDot = /^\s*(\d{1,3})\.\s*(.+)$/.exec(t)
+        if (matchNumDot) {
+          const n = Number(matchNumDot[1])
+          const rest = matchNumDot[2]
+          if (n >= 1 && n <= 100) {
+            const restWords = rest.split(/\s+/).filter(Boolean)
+            if (restWords.length === 0) {
+              line1 = t
+            } else {
+              const prefix = `${n}. ${restWords[0]}`
+              const remainder = restWords.slice(1).join(' ')
+              // Try to put prefix + as much as fits on line1 (but prefix must stay intact)
+              const fullWidth = Math.ceil(ctx.measureText(t).width) || 1
+              const maxLine1 = Math.max(40, Math.floor(fullWidth * 0.7))
+              let acc = prefix
+              if (ctx.measureText(acc).width > maxLine1) {
+                // prefix alone is too wide → keep whole text on one line to avoid splitting prefix
+                line1 = t
+              } else if (!remainder) {
+                line1 = acc
+                line2 = ''
+              } else {
+                const remWords = remainder.split(/\s+/).filter(Boolean)
+                for (let i = 0; i < remWords.length; i++) {
+                  const test = acc + ' ' + remWords[i]
+                  if (ctx.measureText(test).width <= maxLine1) {
+                    acc = test
+                  } else {
+                    line1 = acc
+                    line2 = remWords.slice(i).join(' ')
+                    break
+                  }
+                }
+                if (!line1) {
+                  line1 = acc
+                  line2 = ''
+                }
+              }
+            }
+          } else if (words.length <= 1) {
+            line1 = t
+          }
+        }
+        if (!line1 && !line2) {
+          if (words.length <= 1) {
+            line1 = t
+          } else {
+            // Greedy fill line1 up to ~70% of full width, rest to line2
+            let acc = ''
+            const fullWidth = Math.ceil(ctx.measureText(t).width) || 1
+            const maxLine1 = Math.max(40, Math.floor(fullWidth * 0.7))
+            for (let i = 0; i < words.length; i++) {
+              const test = acc ? acc + ' ' + words[i] : words[i]
+              if (ctx.measureText(test).width <= maxLine1) {
+                acc = test
+              } else {
+                // stop and push remainder to line2
+                line1 = acc || words[i]
+                line2 = words.slice(i + (acc ? 0 : 1)).join(' ')
+                break
+              }
+            }
+            if (!line1) line1 = acc
+            if (!line2 && acc && acc.length < t.length) {
+              const used = line1.length
+              if (used < t.length) line2 = t.slice(used).trim()
+            }
+            if (!line2) line2 = ''
+          }
+        }
+
+        const lines = line2 ? [line1, line2] : [line1]
+        const lineHeigthPx = fontSize + lineGap
+        const maxLineWidth = Math.max(...lines.map(l => Math.ceil(ctx.measureText(l).width)))
+        const totalLinesHeight = lines.length * lineHeigthPx
+
+        // After rotation, width/height swap
+        canvas.width = totalLinesHeight + padding * 2
+        canvas.height = maxLineWidth + padding * 2
+        const cx = canvas.getContext('2d')!
+        cx.fillStyle = '#000'
+        cx.font = `${fontSize}px Roboto, sans-serif`
+        cx.translate(canvas.width / 2, canvas.height / 2)
+        cx.rotate(-Math.PI / 2)
+        cx.textAlign = 'center'
+        cx.textBaseline = 'middle'
+        if (lines.length === 1) {
+          cx.fillText(lines[0], 0, 0)
+        } else {
+          const y0 = -lineHeigthPx / 2
+          const y1 = lineHeigthPx / 2
+          cx.fillText(lines[0], 0, y0)
+          cx.fillText(lines[1], 0, y1)
+        }
+        return canvas.toDataURL('image/png')
+      }
+
+      const header: any[] = [
         'Номер',
         'Название команды',
-        ...stageCols.map(c => (c.name || '').split(' ').join('\n')),
+        ...stageCols.map(c => ({ image: renderRotated(c.name || ''), alignment: 'center', margin: [0, 2, 0, 2] })),
         'Сумма баллов',
         'Место',
       ]
@@ -108,6 +244,7 @@ export default function ReportPage() {
         pageSize: 'A4',
         pageOrientation: 'landscape',
         pageMargins: [24, 24, 24, 24],
+        defaultStyle: { fontSize: 12 },
         content: [
           { text: title, style: 'header', margin: [0, 0, 0, 12] },
           {
@@ -123,6 +260,7 @@ export default function ReportPage() {
               vLineColor: () => '#000',
             },
           },
+          { text: `\nГлавный судья ___________________________________  ${chiefSignature || ''}`, margin: [0, 12, 0, 0] },
         ],
         styles: {
           header: { fontSize: 16, bold: true },
@@ -137,6 +275,20 @@ export default function ReportPage() {
 
   return (
     <div style={{ padding: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 }}>
+        <input
+          value={reportTitle}
+          onChange={(e) => setReportTitle(e.target.value)}
+          placeholder="Заголовок отчета"
+          style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+        />
+        <input
+          value={chiefSignature}
+          onChange={(e) => setChiefSignature(e.target.value)}
+          placeholder="Подпись"
+          style={{ fontSize: 16, padding: '10px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+        />
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
         <button onClick={handleSendAll} disabled={sending} style={{ padding: '10px 12px', borderRadius: 10, border: '1px solid #0bb783', background: '#0bd18a', color: '#fff', fontWeight: 700 }}>
           Отправить
@@ -148,7 +300,7 @@ export default function ReportPage() {
           const ok = statusById[j.id]
           return (
             <div key={j.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-              <button style={{ width: 64, height: 64, borderRadius: 12, border: ok ? '1px solid #0bb783' : '1px solid #e5e5ea', background: ok ? '#0bd18a' : '#fff', color: ok ? '#fff' : '#444', fontSize: 20, fontWeight: 700 }}>
+              <button onClick={() => openJudgeForm(j.id)} style={{ width: 64, height: 64, borderRadius: 12, border: ok ? '1px solid #0bb783' : '1px solid #e5e5ea', background: ok ? '#0bd18a' : '#fff', color: ok ? '#fff' : '#444', fontSize: 20, fontWeight: 700 }}>
                 {initials(j.fullName)}
               </button>
               <div style={{ fontSize: 11, textAlign: 'center' }}>{j.fullName}</div>
@@ -157,20 +309,8 @@ export default function ReportPage() {
         })}
       </div>
 
-      {links.length > 0 && (
-        <div style={{ marginTop: 16 }}>
-          <div style={{ fontSize: 12, marginBottom: 6 }}>Сгенерированные ссылки:</div>
-          <ul style={{ paddingLeft: 16, margin: 0 }}>
-            {links.map((l) => (
-              <li key={l.token} style={{ fontSize: 12 }}>
-                <a href={`http://localhost:5173${l.url}`} target="_blank" rel="noreferrer">
-                  {`http://localhost:5173${l.url}`}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* auto-refresh уже есть; кнопка не нужна */}
+
 
       <div style={{ marginTop: 24 }}>
         <button onClick={handleGeneratePdf} style={{ width: '100%', padding: '14px 16px', fontSize: 16, borderRadius: 12, border: '1px solid #0bb783', background: '#0bd18a', color: '#fff', fontWeight: 700 }}>

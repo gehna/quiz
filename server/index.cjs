@@ -215,12 +215,21 @@ ${link}
       const userTeams = teamsDb[user] || []
       const judge = judgeId ? userJudges.find(j => j.id === judgeId) : userJudges[0]
       if (!judge) return send(res, 400, { error: 'No judges for user' })
-      const token = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)
-      const pair = userDistr.find((p) => p.judgeId === judge.id)
-      const stage = pair ? (userStages.find((s) => s.id === pair.stageId) || null) : null
       subsDb[user] = subsDb[user] || {}
-      subsDb[user][token] = { judgeId: judge.id, submitted: false, answers: [], stage, teams: userTeams, judgeName: judge.fullName || '' }
-      fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
+      // Reuse existing token for this judge if present
+      let existingToken = null
+      for (const tk of Object.keys(subsDb[user])) {
+        const rec = subsDb[user][tk]
+        if (rec && rec.judgeId === judge.id) { existingToken = tk; break }
+      }
+      let token = existingToken
+      if (!token) {
+        token = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)
+        const pair = userDistr.find((p) => p.judgeId === judge.id)
+        const stage = pair ? (userStages.find((s) => s.id === pair.stageId) || null) : null
+        subsDb[user][token] = { judgeId: judge.id, submitted: false, answers: [], stage, teams: userTeams, judgeName: judge.fullName || '' }
+        fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
+      }
       const urlOut = `http://localhost:${PORT}/s/${token}`
       return send(res, 200, { url: urlOut, token, judgeId: judge.id })
     } catch (e) {
@@ -237,10 +246,28 @@ ${link}
     const byJudge = {}
     const entries = subsDb[user] ? Object.values(subsDb[user]) : []
     for (const rec of entries) {
-      byJudge[rec.judgeId] = rec.submitted === true
+      const jid = rec.judgeId
+      const submitted = rec.submitted === true
+      if (jid) {
+        byJudge[jid] = (byJudge[jid] === true) || submitted
+      }
     }
     const status = userJudges.map(j => ({ judgeId: j.id, submitted: Boolean(byJudge[j.id]) }))
     return send(res, 200, { status })
+  }
+
+  if (url.pathname === '/api/report/reset' && req.method === 'POST') {
+    try {
+      const raw = await readBody(req)
+      const { user } = JSON.parse(raw || '{}')
+      if (!user) return send(res, 400, { error: 'Missing user' })
+      const subsDb = JSON.parse(fs.readFileSync(DATA_FILE_SUBMISSIONS, 'utf-8'))
+      subsDb[user] = {}
+      fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
+      return send(res, 200, { ok: true })
+    } catch (e) {
+      return send(res, 500, { error: 'Server error' })
+    }
   }
 
   if (url.pathname === '/api/report/results' && req.method === 'GET') {
@@ -306,12 +333,26 @@ ${link}
     if (req.method === 'POST') {
       try {
         const raw = await readBody(req)
-        const { answers } = JSON.parse(raw || '{}')
+        const { answers, submitted } = JSON.parse(raw || '{}')
         const subsDb = JSON.parse(fs.readFileSync(DATA_FILE_SUBMISSIONS, 'utf-8'))
         for (const user of Object.keys(subsDb)) {
           if (subsDb[user][token]) {
-            subsDb[user][token].answers = Array.isArray(answers) ? answers : []
-            subsDb[user][token].submitted = true
+            const rec = subsDb[user][token]
+            if (Array.isArray(answers)) {
+              rec.answers = answers
+            }
+            if (submitted === true) {
+              rec.submitted = true
+            } else if (submitted === false) {
+              // Reset submitted state for all tokens of this judge
+              const judgeId = rec.judgeId
+              for (const tk of Object.keys(subsDb[user])) {
+                const r2 = subsDb[user][tk]
+                if (r2 && r2.judgeId === judgeId) {
+                  r2.submitted = false
+                }
+              }
+            }
             fs.writeFileSync(DATA_FILE_SUBMISSIONS, JSON.stringify(subsDb, null, 2), 'utf-8')
             return send(res, 200, { ok: true })
           }

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 type Stage = { id: string; number: string; name: string }
 
 export default function PublicSubmission() {
   const { token } = useParams()
+  const navigate = useNavigate()
   const [judgeName, setJudgeName] = useState<string>('')
   const [stage, setStage] = useState<Stage | null>(null)
   const [teams, setTeams] = useState<Array<{ id: string; number: string; name: string }>>([])
@@ -24,6 +25,13 @@ export default function PublicSubmission() {
         setJudgeName(data.judgeName || '')
         setStage(data.stage || null)
         setTeams(Array.isArray(data.teams) ? data.teams : [])
+        if (Array.isArray(data.answers)) {
+          const map: Record<string, string> = {}
+          for (const a of data.answers) {
+            if (a && a.teamId) map[a.teamId] = String(a.value ?? '')
+          }
+          setAnswers(map)
+        }
       } catch {
         setError('Ссылка недействительна')
       } finally {
@@ -43,7 +51,16 @@ export default function PublicSubmission() {
   }
 
   const handleSave = () => {
-    alert('Сохранено (локально на этой странице)')
+    const arr = teams.map((t) => ({ teamId: t.id, value: answers[t.id] || '' }))
+    fetch(`http://localhost:4000/api/submission/${token}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers: arr, submitted: false }),
+    }).then(() => {
+      alert('Черновик сохранен')
+    }).catch(() => {
+      alert('Не удалось сохранить')
+    })
   }
 
   const handleSubmit = async () => {
@@ -72,7 +89,7 @@ export default function PublicSubmission() {
       await fetch(`http://localhost:4000/api/submission/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers: arr }),
+        body: JSON.stringify({ answers: arr, submitted: true }),
       })
       alert('Отправлено')
     } catch {
@@ -85,6 +102,41 @@ export default function PublicSubmission() {
 
   return (
     <div style={{ padding: 16 }}>
+      <div style={{ marginBottom: 8 }}>
+        <button
+          onClick={async () => {
+            // validate like submit; if invalid, reset submitted state to false
+            const n = teams.length
+            const values = teams.map((t) => Number(answers[t.id] || NaN))
+            const missingOrInvalidIds: string[] = []
+            const seen = new Set<number>()
+            for (let i = 0; i < teams.length; i++) {
+              const v = values[i]
+              if (!Number.isInteger(v) || v < 1 || v > n) {
+                missingOrInvalidIds.push(teams[i].id)
+              } else if (seen.has(v)) {
+                missingOrInvalidIds.push(teams[i].id)
+              } else {
+                seen.add(v)
+              }
+            }
+            if (missingOrInvalidIds.length > 0 || seen.size !== n) {
+              try {
+                const arr = teams.map((t) => ({ teamId: t.id, value: String(answers[t.id] || '') }))
+                await fetch(`http://localhost:4000/api/submission/${token}`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ answers: arr, submitted: false }),
+                })
+              } catch {}
+            }
+            navigate('/report')
+          }}
+          style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #e5e5ea' }}
+        >
+          Назад
+        </button>
+      </div>
       <h2 style={{ margin: '8px 0 8px' }}>{judgeName ? `Судья: ${judgeName}` : 'Судья'}</h2>
       <div style={{ marginBottom: 12, color: '#555' }}>{stage ? `Этап: ${stage.number ? stage.number + '. ' : ''}${stage.name}` : 'Этап не назначен'}</div>
       {globalError && (
