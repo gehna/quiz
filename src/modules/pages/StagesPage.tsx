@@ -16,6 +16,8 @@ export default function StagesPage() {
   const [stages, setStages] = useState<Stage[]>([])
   const [invalidNumberIds, setInvalidNumberIds] = useState<Set<string>>(new Set())
   const [invalidNameIds, setInvalidNameIds] = useState<Set<string>>(new Set())
+  const renumber = (list: Stage[]) => list.map((s, idx) => ({ ...s, number: String(idx + 1) }))
+
 
   useEffect(() => {
     async function load() {
@@ -49,15 +51,22 @@ export default function StagesPage() {
   }, [stages, currentUser])
 
   const handleAdd = () => {
-    setStages((prev) => [...prev, { id: crypto.randomUUID(), number: '', name: '' }])
+    setStages((prev) => renumber([...prev, { id: crypto.randomUUID(), number: '', name: '' }]))
   }
 
   const handleRemove = (id: string) => {
-    setStages((prev) => prev.filter((s) => s.id !== id))
+    setStages((prev) => renumber(prev.filter((s) => s.id !== id)))
   }
 
   const handleChange = (id: string, field: keyof Stage, value: string) => {
-    setStages((prev) => prev.map((s) => (s.id === id ? { ...s, [field]: value } : s)))
+    setStages((prev) => {
+      const next = prev.map((s) => (s.id === id ? { ...s, [field]: value } : s))
+      // If user edits numbers manually, keep sequence compact: 1..N without gaps
+      if (field === 'number') {
+        return renumber(next)
+      }
+      return next
+    })
     if (field === 'number') {
       setInvalidNumberIds((prev) => {
         const next = new Set(prev)

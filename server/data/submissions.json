@@ -245,6 +245,128 @@
         }
       ],
       "judgeName": "Гриша"
+    },
+    "yt8jhl7a7rlygat2m0cpe": {
+      "judgeId": "8057465b-5b30-4229-8c88-d0a2fbbad1a7",
+      "submitted": false,
+      "answers": [
+        {
+          "teamId": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "value": ""
+        },
+        {
+          "teamId": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "value": ""
+        },
+        {
+          "teamId": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "value": ""
+        },
+        {
+          "teamId": "9afaac20-f104-446e-98b1-640fb87730b6",
+          "value": ""
+        },
+        {
+          "teamId": "ddca30a3-61fb-40ed-887e-de311ed98e32",
+          "value": ""
+        },
+        {
+          "teamId": "0f987a22-6e8f-4bf7-8e69-71258e8cb00b",
+          "value": ""
+        },
+        {
+          "teamId": "547d97da-d4c1-4303-bb29-efc01cb38638",
+          "value": ""
+        },
+        {
+          "teamId": "a7097b85-a8c5-411d-bb00-d93d362c5d6b",
+          "value": ""
+        },
+        {
+          "teamId": "5af01731-20b9-4b4a-be2c-3f74d099516b",
+          "value": ""
+        },
+        {
+          "teamId": "c28f49fd-3427-4fe9-83b5-c36e820be1e2",
+          "value": ""
+        },
+        {
+          "teamId": "366a521f-2bdf-4df9-a340-4d3eb2282313",
+          "value": ""
+        },
+        {
+          "teamId": "cdf09495-6ef0-4ea7-9516-84abd0234ae8",
+          "value": ""
+        }
+      ],
+      "stage": {
+        "id": "e03d491c-90b5-421d-b453-13a314361a3a",
+        "number": "7",
+        "name": "Командный лабиринт веревочный"
+      },
+      "teams": [
+        {
+          "id": "30840ea2-f01e-4f76-a977-072c5f8cf3a5",
+          "number": "1",
+          "name": "Светлячки"
+        },
+        {
+          "id": "ffd8e8fc-b363-4067-b4a4-5342c3b94194",
+          "number": "2",
+          "name": "Гориллы"
+        },
+        {
+          "id": "fa71a27f-37b7-4d4b-9500-7e9912f42690",
+          "number": "3",
+          "name": "Абзац"
+        },
+        {
+          "id": "9afaac20-f104-446e-98b1-640fb87730b6",
+          "number": "4",
+          "name": "Кто такие"
+        },
+        {
+          "id": "ddca30a3-61fb-40ed-887e-de311ed98e32",
+          "number": "5",
+          "name": "Очень длинное название 123"
+        },
+        {
+          "id": "0f987a22-6e8f-4bf7-8e69-71258e8cb00b",
+          "number": "6",
+          "name": "Анука давай ка плясать выходи"
+        },
+        {
+          "id": "547d97da-d4c1-4303-bb29-efc01cb38638",
+          "number": "7",
+          "name": "Скромняги Хагги-Вагги"
+        },
+        {
+          "id": "a7097b85-a8c5-411d-bb00-d93d362c5d6b",
+          "number": "8",
+          "name": "Архитекторы"
+        },
+        {
+          "id": "5af01731-20b9-4b4a-be2c-3f74d099516b",
+          "number": "9",
+          "name": "Грибная поляна"
+        },
+        {
+          "id": "c28f49fd-3427-4fe9-83b5-c36e820be1e2",
+          "number": "10",
+          "name": "Грибы"
+        },
+        {
+          "id": "366a521f-2bdf-4df9-a340-4d3eb2282313",
+          "number": "11",
+          "name": "Маслята"
+        },
+        {
+          "id": "cdf09495-6ef0-4ea7-9516-84abd0234ae8",
+          "number": "12",
+          "name": "Кисоньки"
+        }
+      ],
+      "judgeName": "7-Валя"
     }
   }
 }

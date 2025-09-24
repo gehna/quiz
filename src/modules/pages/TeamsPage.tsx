@@ -13,6 +13,8 @@ export default function TeamsPage() {
   const [invalidNumberIds, setInvalidNumberIds] = useState<Set<string>>(new Set())
   const [invalidNameIds, setInvalidNameIds] = useState<Set<string>>(new Set())
 
+  const renumber = (list: Team[]) => list.map((t, idx) => ({ ...t, number: String(idx + 1) }))
+
   useEffect(() => {
     async function load() {
       try {
@@ -45,15 +47,19 @@ export default function TeamsPage() {
   }, [teams, currentUser])
 
   const handleAdd = () => {
-    setTeams((prev) => [...prev, { id: crypto.randomUUID(), number: '', name: '' }])
+    setTeams((prev) => renumber([...prev, { id: crypto.randomUUID(), number: '', name: '' }]))
   }
 
   const handleRemove = (id: string) => {
-    setTeams((prev) => prev.filter((t) => t.id !== id))
+    setTeams((prev) => renumber(prev.filter((t) => t.id !== id)))
   }
 
   const handleChange = (id: string, field: keyof Team, value: string) => {
-    setTeams((prev) => prev.map((t) => (t.id === id ? { ...t, [field]: value } : t)))
+    setTeams((prev) => {
+      const next = prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
+      if (field === 'number') return renumber(next)
+      return next
+    })
     if (field === 'number') {
       setInvalidNumberIds((prev) => { const next = new Set(prev); if (value.trim()) next.delete(id); return next })
     }

@@ -99,7 +99,20 @@ export default function ReportPage() {
 
   const initials = (fullName: string) => {
     const parts = fullName.trim().split(/\s+/)
-    const s = parts.slice(0, 2).map(p => p[0] || '').join('').toUpperCase()
+    const takeFirstAlnum = (s: string) => {
+      const m = s.match(/[\p{L}\p{N}]/u)
+      return m ? m[0] : ''
+    }
+    if (parts.length <= 1) {
+      const token = (parts[0] || '').trim()
+      // keep only letters/digits, take up to 2
+      const cleaned = (token.match(/[\p{L}\p{N}]/gu) || []).join('')
+      const out = cleaned.slice(0, 2)
+      return (out || '??').toUpperCase()
+    }
+    const first = takeFirstAlnum(parts[0])
+    const second = takeFirstAlnum(parts[1])
+    const s = (first + second).toUpperCase()
     return s || '??'
   }
 
@@ -268,8 +281,8 @@ export default function ReportPage() {
         String(r.teamNumber ?? ''),
         String(r.teamName ?? ''),
         ...stageCols.map(c => r.perStage[c.id] != null ? String(r.perStage[c.id]) : ''),
-        String(r.total ?? ''),
-        String(r.place ?? ''),
+        { text: String(r.total ?? ''), alignment: 'center' },
+        { text: String(r.place ?? ''), alignment: 'center' },
       ])
       const docDefinition: any = {
         pageSize: 'A4',
@@ -329,12 +342,12 @@ export default function ReportPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
-        {judges.map((j) => {
+        {judges.map((j, idx) => {
           const ok = statusById[j.id]
           return (
             <div key={j.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-              <button onClick={() => openJudgeForm(j.id)} style={{ width: 64, height: 64, borderRadius: 12, border: ok ? '1px solid #0bb783' : '1px solid #e5e5ea', background: ok ? '#0bd18a' : '#fff', color: ok ? '#fff' : '#444', fontSize: 20, fontWeight: 700 }}>
-                {initials(j.fullName)}
+              <button onClick={() => openJudgeForm(j.id)} style={{ width: 64, height: 64, borderRadius: 12, border: ok ? '1px solid #0bb783' : '1px solid #e5e5ea', background: ok ? '#0bd18a' : '#fff', color: ok ? '#fff' : '#444', fontSize: 16, fontWeight: 700 }}>
+                {String(idx + 1)}
               </button>
               <div style={{ fontSize: 11, textAlign: 'center' }}>{j.fullName}</div>
             </div>
