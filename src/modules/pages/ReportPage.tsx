@@ -277,13 +277,22 @@ export default function ReportPage() {
         { image: renderRotated('Сумма баллов', { wrap: false }), alignment: 'center', margin: [0, 1, 0, 1] },
         'Место',
       ]
-      const body = rows.map(r => [
-        String(r.teamNumber ?? ''),
-        String(r.teamName ?? ''),
-        ...stageCols.map(c => r.perStage[c.id] != null ? String(r.perStage[c.id]) : ''),
-        { text: String(r.total ?? ''), alignment: 'center' },
-        { text: String(r.place ?? ''), alignment: 'center' },
-      ])
+      const medalColor = (place: number | undefined) => {
+        if (place === 1) return '#FFD700' // gold
+        if (place === 2) return '#C0C0C0' // silver
+        if (place === 3) return '#CD7F32' // bronze
+        return undefined
+      }
+      const body = rows.map(r => {
+        const color = medalColor(r.place as any)
+        return [
+          String(r.teamNumber ?? ''),
+          { text: String(r.teamName ?? ''), fillColor: color },
+          ...stageCols.map(c => r.perStage[c.id] != null ? String(r.perStage[c.id]) : ''),
+          { text: String(r.total ?? ''), alignment: 'center' },
+          { text: String(r.place ?? ''), alignment: 'center', fillColor: color },
+        ]
+      })
       const docDefinition: any = {
         pageSize: 'A4',
         pageOrientation: 'landscape',

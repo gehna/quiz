@@ -341,10 +341,19 @@ ${link}
       }
       return { teamId: t.id, teamName: t.name || '', teamNumber: t.number || '', perStage, total }
     })
-    // Rank by total ascending; missing values treated as large
+    // Rank by total ascending (dense ranking): equal totals share a place, next place increments by 1
     const MAX = 1e9
     results.sort((a, b) => (a.total || MAX) - (b.total || MAX))
-    results.forEach((r, idx) => { r.place = idx + 1 })
+    let lastTotal = null
+    let currentPlace = 0
+    for (const r of results) {
+      const t = (typeof r.total === 'number' && Number.isFinite(r.total)) ? r.total : MAX
+      if (lastTotal === null || t !== lastTotal) {
+        currentPlace += 1
+        lastTotal = t
+      }
+      r.place = currentPlace
+    }
 
     const stageColumns = userStages.map((s) => ({ id: s.id, name: (s.number ? s.number + '. ' : '') + (s.name || '') }))
     return send(res, 200, { stages: stageColumns, teams: userTeams.map(t => ({ id: t.id, name: t.name, number: t.number })), rows: results })
