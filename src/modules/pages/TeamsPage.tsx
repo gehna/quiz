@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../modules/auth/AuthContext'
+import { apiFetch } from '../../utils/api'
 
 type Team = { id: string; number: string; name: string }
 
@@ -19,7 +20,7 @@ export default function TeamsPage() {
     async function load() {
       try {
         const user = currentUser || 'guest'
-        const res = await fetch(`http://localhost:4000/api/teams?user=${encodeURIComponent(user)}`)
+        const res = await apiFetch(`/api/teams?user=${encodeURIComponent(user)}`)
         if (!res.ok) throw new Error('Failed to load')
         const data = await res.json()
         if (Array.isArray(data?.teams)) {
@@ -83,7 +84,7 @@ export default function TeamsPage() {
     localStorage.setItem(getStorageKey(currentUser), JSON.stringify(filtered))
     try {
       const user = currentUser || 'guest'
-      await fetch('http://localhost:4000/api/teams', {
+      await apiFetch('/api/teams', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, teams: filtered }),

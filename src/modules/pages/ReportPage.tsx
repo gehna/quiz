@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { apiFetch } from '../../utils/api'
 // Using pdfmake for proper Cyrillic support
 // @ts-ignore
 import pdfMake from 'pdfmake/build/pdfmake'
@@ -30,7 +31,7 @@ export default function ReportPage() {
     async function load() {
       try {
         const user = currentUser || 'guest'
-        const res = await fetch(`http://localhost:4000/api/judges?user=${encodeURIComponent(user)}`)
+        const res = await apiFetch(`/api/judges?user=${encodeURIComponent(user)}`)
         if (res.ok) {
           const data = await res.json()
           setJudges(Array.isArray(data?.judges) ? data.judges : [])
@@ -40,7 +41,7 @@ export default function ReportPage() {
       // Load report settings (title/signature)
       try {
         const user = currentUser || 'guest'
-        const rs = await fetch(`http://localhost:4000/api/report/settings?user=${encodeURIComponent(user)}`)
+        const rs = await apiFetch(`/api/report/settings?user=${encodeURIComponent(user)}`)
         if (rs.ok) {
           const data = await rs.json()
           if (typeof data?.title === 'string') setReportTitle(data.title)
@@ -57,7 +58,7 @@ export default function ReportPage() {
     if (!settingsLoaded) return
     const user = currentUser || 'guest'
     const handle = setTimeout(() => {
-      fetch('http://localhost:4000/api/report/settings', {
+      apiFetch('/api/report/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, title: reportTitle, signature: chiefSignature }),
@@ -69,7 +70,7 @@ export default function ReportPage() {
   const refreshStatus = async () => {
     try {
       const user = currentUser || 'guest'
-      const res = await fetch(`http://localhost:4000/api/report/status?user=${encodeURIComponent(user)}`)
+      const res = await apiFetch(`/api/report/status?user=${encodeURIComponent(user)}`)
       if (res.ok) {
         const data = await res.json()
         const map: Record<string, boolean> = {}
@@ -86,12 +87,12 @@ export default function ReportPage() {
       const user = currentUser || 'guest'
       // Reset all submissions, statuses, and manual placements
       const [res, manualRes] = await Promise.all([
-        fetch('http://localhost:4000/api/report/reset', {
+        apiFetch('/api/report/reset', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user }),
         }),
-        fetch('http://localhost:4000/api/manual-placement/reset', {
+        apiFetch('/api/manual-placement/reset', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user }),
@@ -130,7 +131,7 @@ export default function ReportPage() {
   const openJudgeForm = async (judgeId: string) => {
     try {
       const user = currentUser || 'guest'
-      const res = await fetch('http://localhost:4000/api/report/send-one', {
+      const res = await apiFetch('/api/report/send-one', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, judgeId }),
@@ -154,8 +155,8 @@ export default function ReportPage() {
     try {
       const user = currentUser || 'guest'
       const [res, manualRes] = await Promise.all([
-        fetch(`http://localhost:4000/api/report/results?user=${encodeURIComponent(user)}`),
-        fetch(`http://localhost:4000/api/manual-placement?user=${encodeURIComponent(user)}`)
+        apiFetch(`/api/report/results?user=${encodeURIComponent(user)}`),
+        apiFetch(`/api/manual-placement?user=${encodeURIComponent(user)}`)
       ])
       if (!res.ok) {
         alert('Нет данных для отчета')

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../modules/auth/AuthContext'
+import { apiFetch } from '../../utils/api'
 
 type Stage = {
   id: string
@@ -23,7 +24,7 @@ export default function StagesPage() {
     async function load() {
       try {
         const user = currentUser || 'guest'
-        const res = await fetch(`http://localhost:4000/api/stages?user=${encodeURIComponent(user)}`)
+        const res = await apiFetch(`/api/stages?user=${encodeURIComponent(user)}`)
         if (!res.ok) throw new Error('Failed to load')
         const data = await res.json()
         if (Array.isArray(data?.stages)) {
@@ -98,7 +99,7 @@ export default function StagesPage() {
     localStorage.setItem(getStorageKey(currentUser), JSON.stringify(filtered))
     try {
       const user = currentUser || 'guest'
-      await fetch('http://localhost:4000/api/stages', {
+      await apiFetch('/api/stages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, stages: filtered }),

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../modules/auth/AuthContext'
+import { apiFetch } from '../../utils/api'
 
 type Judge = { id: string; number?: string; fullName: string }
 type Stage = { id: string; number: string; name: string }
@@ -18,15 +19,15 @@ export default function DistributionPage() {
       const user = currentUser || 'guest'
       try {
         const [j, s] = await Promise.all([
-          fetch(`http://localhost:4000/api/judges?user=${encodeURIComponent(user)}`).then(r => r.json()),
-          fetch(`http://localhost:4000/api/stages?user=${encodeURIComponent(user)}`).then(r => r.json()),
+          apiFetch(`/api/judges?user=${encodeURIComponent(user)}`).then(r => r.json()),
+          apiFetch(`/api/stages?user=${encodeURIComponent(user)}`).then(r => r.json()),
         ])
         setJudges(Array.isArray(j.judges) ? j.judges : [])
         setStages(Array.isArray(s.stages) ? s.stages : [])
       } catch {}
 
       try {
-        const res = await fetch(`http://localhost:4000/api/distribution?user=${encodeURIComponent(user)}`)
+        const res = await apiFetch(`/api/distribution?user=${encodeURIComponent(user)}`)
         if (res.ok) {
           const data = await res.json()
           if (Array.isArray(data?.distribution)) setPairs(data.distribution)
@@ -67,7 +68,7 @@ export default function DistributionPage() {
     localStorage.setItem(key(currentUser), JSON.stringify(filtered))
     try {
       const user = currentUser || 'guest'
-      await fetch('http://localhost:4000/api/distribution', {
+      await apiFetch('/api/distribution', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, distribution: filtered }),

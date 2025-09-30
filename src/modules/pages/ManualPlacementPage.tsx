@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { apiFetch } from '../../utils/api'
 
 interface Team {
   id: string
@@ -61,11 +62,11 @@ const ManualPlacementPage: React.FC = () => {
       }
 
       console.log('Making API requests...')
-      const [teamsRes, resultsRes, manualRes] = await Promise.all([
-        fetch(`http://localhost:4000/api/teams?user=${user}`),
-        fetch(`http://localhost:4000/api/report/results?user=${user}`),
-        fetch(`http://localhost:4000/api/manual-placement?user=${user}`)
-      ])
+          const [teamsRes, resultsRes, manualRes] = await Promise.all([
+            apiFetch(`/api/teams?user=${user}`),
+            apiFetch(`/api/report/results?user=${user}`),
+            apiFetch(`/api/manual-placement?user=${user}`)
+          ])
 
       console.log('Teams response status:', teamsRes.status)
       console.log('Results response status:', resultsRes.status)
@@ -137,7 +138,7 @@ const ManualPlacementPage: React.FC = () => {
       
       const payload = { user, placements: validPlacements }
 
-      const response = await fetch(`http://localhost:4000/api/manual-placement`, {
+          const response = await apiFetch(`/api/manual-placement`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

@@ -148,40 +148,58 @@ curl http://localhost:4000/api/judges?user=test
 sudo nano /etc/nginx/sites-available/quiz-app
 ```
 
-Содержимое файла:
+Содержимое файла (HTTPS с редиректом с HTTP):
 ```nginx
+# HTTP -> HTTPS redirect
 server {
     listen 80;
     server_name your-domain.com;  # замените на ваш домен или IP
 
+    # Если используете certbot впервые, можно временно оставить этот сервер для валидации
+    # location /.well-known/acme-challenge/ {
+    #     root /var/www/certbot;
+    # }
+
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS server
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;  # замените на ваш домен
+
+    # SSL (пути создаст certbot)
+    ssl_certificate     /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
     # Логи
     access_log /var/log/nginx/quiz-app.access.log;
-    error_log /var/log/nginx/quiz-app.error.log;
+    error_log  /var/log/nginx/quiz-app.error.log;
 
-    # Проксирование на приложение
+    # Проксирование к Node.js приложению (порт 4000)
     location / {
         proxy_pass http://localhost:4000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-        
-        # Таймауты
+
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
     }
 
-    # Статические файлы (опционально)
-    location /static/ {
-        alias /home/quizapp/quiz-app/dist/;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
+    # (Опционально) раздача статики из dist
+    # location /static/ {
+    #     alias /home/quizapp/quiz-app/dist/;
+    #     expires 1y;
+    #     add_header Cache-Control "public, immutable";
+    # }
 }
 ```
 
