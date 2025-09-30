@@ -89,9 +89,9 @@ export default function TeamsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, teams: filtered }),
       })
-      alert('Сохранено')
+      // saved successfully (silent)
     } catch {
-      alert('Сохранено локально (сервер недоступен)')
+      // fallback saved locally (silent)
     }
   }
 

@@ -104,9 +104,9 @@ export default function StagesPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, stages: filtered }),
       })
-      alert('Сохранено')
+      // saved successfully (silent)
     } catch {
-      alert('Сохранено локально (сервер недоступен)')
+      // fallback saved locally (silent)
     }
   }
 

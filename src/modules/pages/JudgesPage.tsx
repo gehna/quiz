@@ -100,9 +100,9 @@ export default function JudgesPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user, judges: filtered }),
       })
-      alert('Сохранено')
+      // saved successfully (silent)
     } catch {
-      alert('Сохранено локально (сервер недоступен)')
+      // fallback saved locally (silent)
     }
   }
 

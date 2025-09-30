@@ -58,9 +58,9 @@ export default function PublicSubmission() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ answers: arr, submitted: false }),
     }).then(() => {
-      alert('Черновик сохранен')
+      // saved draft silently
     }).catch(() => {
-      alert('Не удалось сохранить')
+      // ignore errors silently
     })
   }
 
@@ -92,9 +92,9 @@ export default function PublicSubmission() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answers: arr, submitted: true }),
       })
-      alert('Отправлено')
+      // submitted successfully (silent)
     } catch {
-      alert('Не удалось отправить')
+      // ignore errors silently
     }
   }
 
