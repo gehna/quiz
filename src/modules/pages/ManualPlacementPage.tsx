@@ -155,7 +155,7 @@ const ManualPlacementPage: React.FC = () => {
       navigate('/report')
     } catch (error) {
       console.error('Error saving manual placements:', error)
-      alert('Ошибка при сохранении: ' + error.message)
+        alert('Ошибка при сохранении: ' + (error instanceof Error ? error.message : String(error)))
     }
   }
 
@@ -229,7 +229,7 @@ const ManualPlacementPage: React.FC = () => {
       <div style={{ marginBottom: '20px' }}>
         {calculatedResults
           .sort((a, b) => a.place - b.place)
-          .map((result, index) => (
+          .map((result) => (
           <div key={result.teamId} style={{ 
             display: 'flex', 
             alignItems: 'center', 

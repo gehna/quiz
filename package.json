@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:server": "echo 'Server build complete'",
+    "start": "node server/index.cjs",
+    "start:prod": "NODE_ENV=production node server/index.cjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "start:server": "node server/index.cjs",
-    "dev:all": "powershell -Command \"Start-Process node -ArgumentList 'server/index.cjs'; vite\""
+    "dev:all": "powershell -Command \"Start-Process node -ArgumentList 'server/index.cjs'; vite\"",
+    "deploy:build": "npm run build && npm run build:server"
   },
   "dependencies": {
     "autotable": "^1.0.0",

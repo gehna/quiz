@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // Using pdfmake for proper Cyrillic support
 // @ts-ignore
@@ -17,7 +17,7 @@ export default function ReportPage() {
   const navigate = useNavigate()
   const [judges, setJudges] = useState<Judge[]>([])
   const [statusById, setStatusById] = useState<Record<string, boolean>>({})
-  const [links, setLinks] = useState<Array<{ judgeId: string; token: string; url: string }>>([])
+  const [, setLinks] = useState<Array<{ judgeId: string; token: string; url: string }>>([])
   const [sending, setSending] = useState(false)
   const [reportTitle, setReportTitle] = useState<string>('Итоговый отчет')
   const [chiefSignature, setChiefSignature] = useState<string>('')
@@ -108,24 +108,24 @@ export default function ReportPage() {
     }
   }
 
-  const initials = (fullName: string) => {
-    const parts = fullName.trim().split(/\s+/)
-    const takeFirstAlnum = (s: string) => {
-      const m = s.match(/[\p{L}\p{N}]/u)
-      return m ? m[0] : ''
-    }
-    if (parts.length <= 1) {
-      const token = (parts[0] || '').trim()
-      // keep only letters/digits, take up to 2
-      const cleaned = (token.match(/[\p{L}\p{N}]/gu) || []).join('')
-      const out = cleaned.slice(0, 2)
-      return (out || '??').toUpperCase()
-    }
-    const first = takeFirstAlnum(parts[0])
-    const second = takeFirstAlnum(parts[1])
-    const s = (first + second).toUpperCase()
-    return s || '??'
-  }
+  // const initials = (fullName: string) => {
+  //   const parts = fullName.trim().split(/\s+/)
+  //   const takeFirstAlnum = (s: string) => {
+  //     const m = s.match(/[\p{L}\p{N}]/u)
+  //     return m ? m[0] : ''
+  //   }
+  //   if (parts.length <= 1) {
+  //     const token = (parts[0] || '').trim()
+  //     // keep only letters/digits, take up to 2
+  //     const cleaned = (token.match(/[\p{L}\p{N}]/gu) || []).join('')
+  //     const out = cleaned.slice(0, 2)
+  //     return (out || '??').toUpperCase()
+  //   }
+  //   const first = takeFirstAlnum(parts[0])
+  //   const second = takeFirstAlnum(parts[1])
+  //   const s = (first + second).toUpperCase()
+  //   return s || '??'
+  // }
 
   const openJudgeForm = async (judgeId: string) => {
     try {
@@ -310,7 +310,7 @@ export default function ReportPage() {
       const body = rows.map(r => {
         const color = medalColor(r.place as any)
         return [
-          String(r.teamNumber ?? ''),
+          String(r.teamName ?? '').split(' ')[0] || '',
           { text: String(r.teamName ?? ''), fillColor: color },
           ...stageCols.map(c => r.perStage[c.id] != null ? String(r.perStage[c.id]) : ''),
           { text: String(r.total ?? ''), alignment: 'center' },
