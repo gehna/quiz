@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { apiFetch } from '../../utils/api'
 
 type Stage = { id: string; number: string; name: string }
 
@@ -19,7 +20,7 @@ export default function PublicSubmission() {
     async function load() {
       setLoading(true)
       try {
-        const res = await fetch(`http://localhost:4000/api/submission/${token}`)
+        const res = await apiFetch(`/api/submission/${token}`)
         if (!res.ok) throw new Error('not found')
         const data = await res.json()
         setJudgeName(data.judgeName || '')
@@ -52,7 +53,7 @@ export default function PublicSubmission() {
 
   const handleSave = () => {
     const arr = teams.map((t) => ({ teamId: t.id, value: answers[t.id] || '' }))
-    fetch(`http://localhost:4000/api/submission/${token}`, {
+    apiFetch(`/api/submission/${token}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ answers: arr, submitted: false }),
@@ -86,7 +87,7 @@ export default function PublicSubmission() {
     }
     try {
       const arr = teams.map((t) => ({ teamId: t.id, value: String(answers[t.id]) }))
-      await fetch(`http://localhost:4000/api/submission/${token}`, {
+      await apiFetch(`/api/submission/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ answers: arr, submitted: true }),
@@ -123,7 +124,7 @@ export default function PublicSubmission() {
             if (missingOrInvalidIds.length > 0 || seen.size !== n) {
               try {
                 const arr = teams.map((t) => ({ teamId: t.id, value: String(answers[t.id] || '') }))
-                await fetch(`http://localhost:4000/api/submission/${token}`, {
+                await apiFetch(`/api/submission/${token}`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ answers: arr, submitted: false }),
