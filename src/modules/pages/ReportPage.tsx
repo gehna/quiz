@@ -165,6 +165,12 @@ export default function ReportPage() {
       const data = await res.json()
       const manualData = manualRes.ok ? await manualRes.json() : []
       const stageCols: Array<{ id: string; name: string }> = data.stages || []
+      const teamNumberById: Record<string, string | number> = {}
+      if (Array.isArray(data.teams)) {
+        for (const t of data.teams) {
+          if (t && t.id) teamNumberById[t.id] = t.number
+        }
+      }
       let rows: Array<{ teamId: string; teamName: string; perStage: Record<string, number|null>; total: number; place: number }>= data.rows || []
       
       // If manual placements exist, use them instead of calculated places
@@ -311,7 +317,7 @@ export default function ReportPage() {
       const body = rows.map(r => {
         const color = medalColor(r.place as any)
         return [
-          String(r.teamName ?? '').split(' ')[0] || '',
+          String(teamNumberById[r.teamId] ?? ''),
           { text: String(r.teamName ?? ''), fillColor: color },
           ...stageCols.map(c => r.perStage[c.id] != null ? String(r.perStage[c.id]) : ''),
           { text: String(r.total ?? ''), alignment: 'center' },
