@@ -314,7 +314,13 @@ export default function ReportPage() {
         if (place === 3) return '#CD7F32' // bronze
         return undefined
       }
-      const body = rows.map(r => {
+      // Sort rows by team number ascending (1..N)
+      const sortedRows = [...rows].sort((a, b) => {
+        const an = Number(teamNumberById[a.teamId] ?? Number.POSITIVE_INFINITY)
+        const bn = Number(teamNumberById[b.teamId] ?? Number.POSITIVE_INFINITY)
+        return an - bn
+      })
+      const body = sortedRows.map(r => {
         const color = medalColor(r.place as any)
         return [
           String(teamNumberById[r.teamId] ?? ''),
