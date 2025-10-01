@@ -113,23 +113,10 @@ const ManualPlacementPage: React.FC = () => {
       const user = localStorage.getItem('auth:user')
       if (!user) return
 
-      // Filter out invalid placements
-      const validPlacements = manualPlacements.filter(p => p.teamId && p.place > 0)
-      
-      // Validate that all places are unique and in correct range
-      const places = validPlacements.map(p => p.place).sort((a, b) => a - b)
-      const expectedPlaces = Array.from({ length: validPlacements.length }, (_, i) => i + 1)
-      
-      if (places.length !== calculatedResults.length) {
-        alert('Не все команды имеют назначенные места')
-        return
-      }
-      
-      if (JSON.stringify(places) !== JSON.stringify(expectedPlaces)) {
-        alert('Места должны быть уникальными и идти от 1 до ' + calculatedResults.length)
-        return
-      }
-      
+      // Accept manual placements as-is (duplicates and any order allowed).
+      // Keep only entries with a valid teamId and positive place value.
+      const validPlacements = manualPlacements.filter(p => p.teamId && Number(p.place) > 0)
+
       const payload = { user, placements: validPlacements }
 
           const response = await apiFetch(`/api/manual-placement`, {
